@@ -1,0 +1,8 @@
+<h2>Registrar Secretaria</h2>
+<form (ngSubmit)="registrar()" #form="ngForm">
+    <input [(ngModel)]="nombre" name="nombre" required placeholder="Nombre" />
+    <input [(ngModel)]="email" name="email" required type="email" placeholder="Email" />
+    <input [(ngModel)]="password" name="password" required type="password" placeholder="Contraseña" />
+    <button type="submit" [disabled]="form.invalid">Registrar</button>
+</form>
+<p *ngIf="mensaje">{{ mensaje }}</p>
