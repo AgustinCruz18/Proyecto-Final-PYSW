@@ -1,0 +1,35 @@
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+#Node.js (backend y frontend)
+backend-turnos/node_modules/
+frontend-turnos/node_modules/
+
+# Archivos de entorno
+backend-turnos/.env
+
+#  Archivos de lock (opcional: puedes subir uno si quieren fijar dependencias)
+backend-turnos/package-lock.json
+frontend-turnos/package-lock.json
+
+# Angular
+frontend-turnos/dist/
+frontend-turnos/.angular/
+
+#  Cobertura de pruebas
+frontend-turnos/coverage/
+
+# Configuración de IDEs/editors
+**/.vscode/
+**/.idea/
+
+# Cache y temporales
+**/.cache/
+**/tmp/
+**/temp/
+
+#  Otros
+*.log
+*.bak
+*.old
