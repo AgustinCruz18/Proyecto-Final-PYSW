@@ -1,1 +1,10 @@
-<p>dashboard-paciente works!</p>
+<!-- ⚠️ ALERTA si no tiene ficha -->
+<div *ngIf="mostrarAlerta" class="alert alert-warning text-center" role="alert">
+    ⚠️ ¡Completá tus <a [routerLink]="['/datos-personales', idUsuario]">datos personales</a> para poder gestionar
+    turnos!
+</div>
+<br>
+
+<div *ngIf="ficha">
+    <h1 class="usuario text-center">Bienvenido, {{ ficha.nombreCompleto }}</h1>
+</div>

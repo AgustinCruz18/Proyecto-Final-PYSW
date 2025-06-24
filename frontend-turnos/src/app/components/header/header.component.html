@@ -1,19 +1,56 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <a class="navbar-brand" href="#">Clínica Local</a>
-    <div class="collapse navbar-collapse justify-content-end">
-        <ul class="navbar-nav">
-            <li class="nav-item dropdown" *ngIf="user()">
-                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
-                    {{ user()?.nombre || 'Usuario' }}
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><span class="dropdown-item-text">{{ user()?.email }}</span></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item text-danger" (click)="logout()">Cerrar sesión</a></li>
-                </ul>
-            </li>
-        </ul>
+    <div class="container-fluid">
+        <a class="navbar-brand">Clínica Local</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+
+                <li class="nav-item d-lg-none d-flex flex-column align-items-start">
+                    <span class="nav-link text-white fw-bold">{{ user()?.nombre || 'Usuario' }}</span>
+                    <span class="dropdown-item-text ms-3">{{ user()?.email }}</span>
+                    <hr class="dropdown-divider w-100 my-1" />
+                    <button class="dropdown-menu-button ms-3" (click)="irAPortada()">Menú</button>
+                    <a class="nav-link ms-3" (click)="irADatosPersonales()">Datos personales</a>
+                    <a class="nav-link text-danger ms-3" (click)="logout()">Cerrar sesión</a>
+                </li>
+
+                <!-- Versión desktop con dropdown -->
+                <li class="nav-item dropdown d-none d-lg-block" *ngIf="user()">
+                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        {{ user()?.nombre || 'Usuario' }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                        <li><span class="dropdown-item-text fw-bold">{{ user()?.email }}</span></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <!-- Botones de menú de cada rol-->
+                        <li class="d-flex align-items-center mb-2 px-2" *ngIf="user()?.rol === 'paciente'">
+                            <i class="bi bi-house-door-fill me-2 text-primary"></i>
+                            <button class="dropdown-menu-button w-100" (click)="irAPortada()">Menu</button>
+                        </li>
+
+                        <li class="d-flex align-items-center mb-2 px-2" *ngIf="user()?.rol === 'secretaria'">
+                            <i class="bi bi-person-badge me-2 text-primary"></i>
+                            <a class="dropdown-item" routerLink="/secretaria">Dashboard Secretaria</a>
+                        </li>
+
+                        <li class="d-flex align-items-center mb-2 px-2" *ngIf="user()?.rol === 'administrador'">
+                            <i class="bi bi-shield-lock-fill me-2 text-primary"></i>
+                            <a class="dropdown-item" routerLink="/admin">Dashboard Admin</a>
+                        </li>
+                        <!-- -->
+                        <li><a class="dropdown-item" (click)="irADatosPersonales()">Datos personales</a></li>
+                        <li><a class="dropdown-item text-danger" (click)="logout()">Cerrar sesión</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>

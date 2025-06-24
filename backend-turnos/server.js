@@ -13,6 +13,9 @@ app.use(passport.initialize());
 // ✅ Importa bien el router
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
+const fichaRoutes = require('./routes/fichaPacienteRoutes');
+app.use('/api/ficha', fichaRoutes);
+
 
 // Conexión con MongoDB
 mongoose.connect(process.env.MONGO_URI)

@@ -1,0 +1,74 @@
+/* Estilo general del navbar */
+.navbar {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo / Marca */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
+}
+
+.navbar-brand:hover {
+    color: #ffc107 !important;
+    /* Color amarillo tipo warning */
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    min-width: 220px;
+    padding: 0.5rem 0;
+    background-color: #bfbcbc;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+}
+
+.dropdown-menu .dropdown-item {
+    padding: 0.6rem 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown-menu .dropdown-item.text-danger:hover {
+    background-color: #ffe6e6;
+    color: #b30000 !important;
+}
+
+/* Botón dentro del dropdown */
+.dropdown-menu-button {
+    background: none;
+    border: none;
+    color: inherit;
+    /* Hereda el color del texto del padre */
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: left;
+    padding: 0.4rem 0.6rem;
+    width: 100%;
+}
+
+.navbar-dark .dropdown-menu-button {
+    color: #636363 !important;
+}
+
+.dropdown-menu-button:hover {
+    background-color: rgba(255, 255, 255, 0.395);
+    color: #fff !important;
+}
+
+/* Divider más suave */
+.dropdown-divider {
+    margin: 0.5rem 0;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* Iconos en items del menú */
+.bi {
+    font-size: 1.1rem;
+}

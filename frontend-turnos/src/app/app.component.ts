@@ -31,14 +31,14 @@ export class AppComponent implements OnInit {
       if (token) {
         this.auth.setToken(token);
         const rol = this.auth.getRoleFromToken();
-        const id = this.auth.getUserIdFromToken(); // nueva función
+        const id = this.auth.getUserIdFromToken(); // <-- importante
 
         if (rol === 'administrador') {
           this.router.navigate(['/admin']);
         } else if (rol === 'secretaria') {
           this.router.navigate(['/secretaria']);
         } else if (rol === 'paciente') {
-          this.router.navigate([`/paciente/${id}`]); // 🔥 esto es clave
+          this.router.navigate([`/paciente/${id}`]);
         }
       }
     });

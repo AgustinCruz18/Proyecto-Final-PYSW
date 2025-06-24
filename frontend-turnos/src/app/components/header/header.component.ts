@@ -22,10 +22,26 @@ export class HeaderComponent {
       return {
         nombre: payload.nombre || '',
         email: payload.email || '',
-        rol: payload.rol
+        rol: payload.rol,
+        id: payload.id
       };
     } catch {
       return null;
+    }
+  }
+  irAPortada() {
+    const id = this.user()?.id;
+    if (id && this.user()?.rol === 'paciente') {
+      this.router.navigate([`/paciente/${id}`]);
+    } else {
+      this.router.navigate(['/portada']);
+    }
+  }
+
+  irADatosPersonales() {
+    const id = this.user()?.id;
+    if (id) {
+      this.router.navigate([`/datos-personales/${id}`]);
     }
   }
 

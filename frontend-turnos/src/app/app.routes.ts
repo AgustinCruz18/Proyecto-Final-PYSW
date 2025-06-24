@@ -6,6 +6,7 @@ import { DashboardSecretariaComponent } from './components/dashboard-secretaria/
 import { DashboardPacienteComponent } from './components/dashboard-paciente/dashboard-paciente.component';
 import { RegistroComponent } from './components/registro/registro.component';
 import { PortadaComponent } from './components/portada/portada.component';
+import { DatosPersonalesComponent } from './components/datos-personales/datos-personales.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'portada', pathMatch: 'full' },
@@ -15,6 +16,8 @@ export const routes: Routes = [
     { path: 'admin', component: DashboardAdminComponent },
     { path: 'secretaria', component: DashboardSecretariaComponent },
     { path: 'paciente/:id', component: DashboardPacienteComponent },
+    { path: 'datos-personales/:id', component: DatosPersonalesComponent },
+    { path: 'secretaria', component: DashboardSecretariaComponent },
     { path: '**', redirectTo: 'portada' }
 ];
 

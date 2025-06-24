@@ -1,0 +1,64 @@
+<div class="container mt-4">
+    <h4>Datos personales</h4>
+    <form (ngSubmit)="guardar()" class="row g-3">
+
+        <div class="col-md-6">
+            <label>DNI</label>
+            <input class="form-control" [(ngModel)]="ficha.dni" name="dni" required />
+        </div>
+
+        <div class="col-md-6">
+            <label>Nombre completo</label>
+            <input class="form-control" [(ngModel)]="ficha.nombreCompleto" name="nombreCompleto" required />
+        </div>
+
+        <div class="col-md-3">
+            <label>Edad</label>
+            <input class="form-control" type="number" [(ngModel)]="ficha.edad" name="edad" required />
+        </div>
+
+        <div class="col-md-3">
+            <label>Género</label>
+            <select class="form-select" [(ngModel)]="ficha.genero" name="genero">
+                <option>Masculino</option>
+                <option>Femenino</option>
+                <option>Otro</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label>Fecha de nacimiento</label>
+            <input type="date" class="form-control" [(ngModel)]="ficha.fechaNacimiento" name="fechaNacimiento" />
+        </div>
+
+
+        <div class="col-md-6">
+            <label>Obra social</label>
+            <select class="form-select" [(ngModel)]="ficha.obraSocial" name="obraSocial">
+                <option>OSDE</option>
+                <option>Swiss Medical</option>
+                <option>IOSFA</option>
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label>Número de socio</label>
+            <input class="form-control" [(ngModel)]="ficha.numeroSocio" name="numeroSocio" />
+        </div>
+
+        <div class="col-md-6">
+            <label>Dirección</label>
+            <input class="form-control" [(ngModel)]="ficha.direccion" name="direccion" />
+        </div>
+
+        <div class="col-md-6">
+            <label>Teléfono</label>
+            <input class="form-control" [(ngModel)]="ficha.telefono" name="telefono" />
+        </div>
+
+        <div class="col-12">
+            <button class="btn btn-success" type="submit">
+                {{ esNuevaFicha ? 'Guardar' : 'Actualizar' }}
+            </button>
+        </div>
+    </form>
+</div>
