@@ -8,6 +8,7 @@ import { RegistroComponent } from './components/registro/registro.component';
 import { PortadaComponent } from './components/portada/portada.component';
 import { DatosPersonalesComponent } from './components/datos-personales/datos-personales.component';
 
+
 export const routes: Routes = [
     { path: '', redirectTo: 'portada', pathMatch: 'full' },
     { path: 'portada', component: PortadaComponent }, // Ruta por defecto

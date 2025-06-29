@@ -10,7 +10,7 @@ passport.use(new GoogleStrategy({
     callbackURL: "http://localhost:5000/api/auth/google/callback"
 }, async (accessToken, refreshToken, profile, done) => {
     try {
-        console.log('🔵 Google Profile:', profile);
+        console.log('Google Profile:', profile);
         let user = await User.findOne({ googleId: profile.id });
         if (!user) {
             user = await User.create({
@@ -19,13 +19,13 @@ passport.use(new GoogleStrategy({
                 email: profile.emails?.[0]?.value || `noemail-${profile.id}@fake.com`,
                 rol: 'paciente'
             });
-            console.log('✅ Usuario creado con Google:', user);
+            console.log('Usuario creado con Google:', user);
         } else {
-            console.log('🔁 Usuario ya existente:', user);
+            console.log('Usuario ya existente:', user);
         }
         return done(null, user);
     } catch (err) {
-        console.error('❌ Error en estrategia Google:', err);
+        console.error('Error en estrategia Google:', err);
         return done(err, null);
     }
 }));

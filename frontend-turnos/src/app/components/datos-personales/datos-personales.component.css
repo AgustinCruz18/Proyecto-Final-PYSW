@@ -1,0 +1,51 @@
+/* Estilo general del formulario */
+form {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Espaciado entre bloques */
+.card {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    border: none;
+}
+
+/* Etiquetas */
+label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 0.3rem;
+}
+
+/* Inputs y selects */
+input,
+select {
+    border-radius: 8px !important;
+}
+
+/* Botón principal */
+button[type="submit"] {
+    font-size: 1rem;
+    padding: 0.6rem 1.4rem;
+    border-radius: 8px;
+}
+
+/* Botones secundarios */
+.btn-outline-primary,
+.btn-sm {
+    border-radius: 6px;
+}
+
+/* Título */
+h4 {
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+/* Espaciado entre secciones */
+.mt-3 {
+    margin-top: 1.5rem !important;
+}

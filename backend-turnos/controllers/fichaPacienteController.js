@@ -28,16 +28,34 @@ exports.createOrUpdateFicha = async (req, res) => {
         edad,
         fechaNacimiento,
         genero,
-        obraSocial,
+        obrasSociales, // array de objetos { nombre, numeroSocio }
         numeroSocio,
         direccion,
         telefono
     } = req.body;
 
     try {
+        // Determinar si la ficha está autorizada
+        let autorizada = false;
+        if (!obrasSociales?.length || obrasSociales.some(os => os.nombre.toLowerCase() === 'particular')) {
+            autorizada = true;
+        }
+
+        // Actualizar o crear con el campo autorizada
         const ficha = await FichaPaciente.findOneAndUpdate(
             { userId },
-            { dni, nombreCompleto, edad, fechaNacimiento, genero, obraSocial, numeroSocio, direccion, telefono },
+            {
+                dni,
+                nombreCompleto,
+                edad,
+                fechaNacimiento,
+                genero,
+                obrasSociales,
+                numeroSocio,
+                direccion,
+                telefono,
+                autorizada // <-- Aquí se agrega el campo calculado
+            },
             { new: true, upsert: true }
         );
 

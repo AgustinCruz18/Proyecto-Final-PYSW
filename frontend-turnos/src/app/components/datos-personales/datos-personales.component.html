@@ -1,64 +1,136 @@
+<!-- Modal de confirmación accesible -->
+<div id="confirmModal" class="modal fade" tabindex="-1" aria-labelledby="confirmModalLabel" aria-modal="true"
+    role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Información</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+                {{ mensajeModal }}
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Cerrar modal">
+                    Cerrar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Formulario de datos personales accesible -->
 <div class="container mt-4">
     <h4>Datos personales</h4>
     <form (ngSubmit)="guardar()" class="row g-3">
 
         <div class="col-md-6">
-            <label>DNI</label>
-            <input class="form-control" [(ngModel)]="ficha.dni" name="dni" required />
+            <label for="nombreCompleto">Nombre completo</label>
+            <input id="nombreCompleto" class="form-control" [(ngModel)]="ficha.nombreCompleto" name="nombreCompleto"
+                required autocomplete="name" />
         </div>
-
         <div class="col-md-6">
-            <label>Nombre completo</label>
-            <input class="form-control" [(ngModel)]="ficha.nombreCompleto" name="nombreCompleto" required />
+            <label for="dni">DNI</label>
+            <input id="dni" class="form-control" [(ngModel)]="ficha.dni" name="dni" required />
         </div>
 
         <div class="col-md-3">
-            <label>Edad</label>
-            <input class="form-control" type="number" [(ngModel)]="ficha.edad" name="edad" required />
+            <label for="edad">Edad</label>
+            <input id="edad" class="form-control" type="number" [(ngModel)]="ficha.edad" name="edad" required
+                autocomplete="bday-year" />
         </div>
 
         <div class="col-md-3">
-            <label>Género</label>
-            <select class="form-select" [(ngModel)]="ficha.genero" name="genero">
+            <label for="genero">Género</label>
+            <select id="genero" class="form-select" [(ngModel)]="ficha.genero" name="genero" autocomplete="sex">
                 <option>Masculino</option>
                 <option>Femenino</option>
                 <option>Otro</option>
             </select>
         </div>
+
         <div class="col-md-6">
-            <label>Fecha de nacimiento</label>
-            <input type="date" class="form-control" [(ngModel)]="ficha.fechaNacimiento" name="fechaNacimiento" />
+            <label for="fechaNacimiento">Fecha de nacimiento</label>
+            <input id="fechaNacimiento" type="date" class="form-control" [(ngModel)]="ficha.fechaNacimiento"
+                name="fechaNacimiento" autocomplete="bday" />
         </div>
 
-
-        <div class="col-md-6">
-            <label>Obra social</label>
-            <select class="form-select" [(ngModel)]="ficha.obraSocial" name="obraSocial">
-                <option>OSDE</option>
-                <option>Swiss Medical</option>
-                <option>IOSFA</option>
-            </select>
+        <div class="col-md-6 mt-3">
+            <label for="direccion">Dirección</label>
+            <input id="direccion" class="form-control" [(ngModel)]="ficha.direccion" name="direccion"
+                autocomplete="street-address" />
         </div>
 
-        <div class="col-md-6">
-            <label>Número de socio</label>
-            <input class="form-control" [(ngModel)]="ficha.numeroSocio" name="numeroSocio" />
+        <div class="col-md-6 mt-3">
+            <label for="telefono">Teléfono</label>
+            <input id="telefono" class="form-control" [(ngModel)]="ficha.telefono" name="telefono" autocomplete="tel" />
         </div>
 
-        <div class="col-md-6">
-            <label>Dirección</label>
-            <input class="form-control" [(ngModel)]="ficha.direccion" name="direccion" />
+        <!-- Obra Social 1 -->
+        <div class="col-12">
+            <div class="card p-3">
+                <h6>Obra Social 1</h6>
+                <select class="form-select mb-2" [(ngModel)]="obraSocialSeleccionada1" name="obraSocial1"
+                    autocomplete="off">
+                    <option *ngFor="let os of obrasSocialesBase" [value]="os">{{ os }}</option>
+                    <option value="Otra">Otra</option>
+                </select>
+
+                <input *ngIf="obraSocialSeleccionada1 === 'Otra'" type="text" class="form-control mb-2"
+                    [(ngModel)]="otraObraSocial1" name="otraObraSocial1" placeholder="Especificar otra obra social"
+                    autocomplete="organization" />
+
+                <input *ngIf="obraSocialSeleccionada1 !== 'Particular'" type="text" class="form-control"
+                    placeholder="Número de socio" [(ngModel)]="numeroSocio1" name="numeroSocio1" autocomplete="off" />
+
+                <button *ngIf="mostrarSegundaObra" type="button" class="btn btn-sm btn-danger mt-2"
+                    (click)="eliminarObraSocial(1)">
+                    Eliminar obra social 1
+                </button>
+            </div>
         </div>
 
-        <div class="col-md-6">
-            <label>Teléfono</label>
-            <input class="form-control" [(ngModel)]="ficha.telefono" name="telefono" />
+        <!-- Botón para agregar otra obra social -->
+        <div class="col-6 text-end">
+            <button *ngIf="!mostrarSegundaObra" type="button" class="btn btn-outline-primary btn-sm mt-2"
+                (click)="agregarSegundaObraSocial()">
+                + Agregar otra obra social
+            </button>
+        </div>
+
+        <!-- Obra Social 2 -->
+        <div class="col-12" *ngIf="mostrarSegundaObra">
+            <div class="card p-3 shadow-sm mt-3">
+                <h6>Obra Social 2</h6>
+                <select class="form-select mb-2" [(ngModel)]="obraSocialSeleccionada2" name="obraSocial2"
+                    autocomplete="off">
+                    <option value="">-- Seleccionar --</option>
+                    <option *ngFor="let os of obrasSocialesBase" [value]="os">{{ os }}</option>
+                    <option value="Otra">Otra</option>
+                </select>
+
+                <input *ngIf="obraSocialSeleccionada2 === 'Otra'" type="text" class="form-control mb-2"
+                    [(ngModel)]="otraObraSocial2" name="otraObraSocial2" placeholder="Especificar otra obra social"
+                    autocomplete="organization" />
+
+                <input *ngIf="obraSocialSeleccionada2 !== 'Particular'" type="text" class="form-control"
+                    placeholder="Número de socio" [(ngModel)]="numeroSocio2" name="numeroSocio2" autocomplete="off" />
+
+                <button type="button" class="btn btn-sm btn-danger mt-2" (click)="eliminarObraSocial(2)">
+                    Eliminar obra social 2
+                </button>
+            </div>
         </div>
 
         <div class="col-12">
-            <button class="btn btn-success" type="submit">
+            <button class="btn btn-success mt-4" type="submit">
                 {{ esNuevaFicha ? 'Guardar' : 'Actualizar' }}
             </button>
         </div>
+
     </form>
 </div>

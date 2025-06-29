@@ -8,8 +8,11 @@ const fichaPacienteSchema = new Schema({
     edad: Number,
     fechaNacimiento: { type: Date },
     genero: { type: String, enum: ['Masculino', 'Femenino', 'Otro'] },
-    obraSocial: { type: String, enum: ['OSDE', 'Swiss Medical', 'IOSFA'] },
-    numeroSocio: String,
+    //obraSocial: { type: String, enum: ['OSDE', 'Swiss Medical', 'IOSFA'] },
+    obrasSociales: [{ // array
+        nombre: String,
+        numeroSocio: String
+    }],
     direccion: String,
     telefono: String,
     autorizada: { type: Boolean, default: false } // secretaria valida esto

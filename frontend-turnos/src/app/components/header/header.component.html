@@ -19,7 +19,6 @@
                     <a class="nav-link text-danger ms-3" (click)="logout()">Cerrar sesión</a>
                 </li>
 
-                <!-- Versión desktop con dropdown -->
                 <li class="nav-item dropdown d-none d-lg-block" *ngIf="user()">
                     <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
@@ -30,7 +29,6 @@
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
-                        <!-- Botones de menú de cada rol-->
                         <li class="d-flex align-items-center mb-2 px-2" *ngIf="user()?.rol === 'paciente'">
                             <i class="bi bi-house-door-fill me-2 text-primary"></i>
                             <button class="dropdown-menu-button w-100" (click)="irAPortada()">Menu</button>
@@ -45,7 +43,6 @@
                             <i class="bi bi-shield-lock-fill me-2 text-primary"></i>
                             <a class="dropdown-item" routerLink="/admin">Dashboard Admin</a>
                         </li>
-                        <!-- -->
                         <li><a class="dropdown-item" (click)="irADatosPersonales()">Datos personales</a></li>
                         <li><a class="dropdown-item text-danger" (click)="logout()">Cerrar sesión</a></li>
                     </ul>

@@ -16,6 +16,10 @@ export class RegistroComponent {
   email = '';
   password = '';
 
+  showMessage: boolean = false;
+  messageText: string = '';
+  messageType: 'success' | 'danger' = 'success';
+
   constructor(private http: HttpClient, private router: Router) { }
 
   onSubmit() {
@@ -25,12 +29,26 @@ export class RegistroComponent {
       password: this.password
     }).subscribe({
       next: () => {
-        alert('Registro exitoso. Inicia sesión.');
-        this.router.navigate(['/login']);
+        this.displayToastMessage('Registro exitoso. ¡Ahora puedes iniciar sesión!', 'success');
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
       },
       error: err => {
-        alert('Error en el registro: ' + (err.error?.message || 'Error desconocido'));
+        const errorMessage = 'Error en el registro: ' + (err.error?.message || 'Error desconocido');
+        this.displayToastMessage(errorMessage, 'danger');
       }
     });
+  }
+
+  displayToastMessage(message: string, type: 'success' | 'danger') {
+    this.messageText = message;
+    this.messageType = type;
+    this.showMessage = true;
+
+    setTimeout(() => {
+      this.showMessage = false;
+      this.messageText = '';
+    }, 3000);
   }
 }

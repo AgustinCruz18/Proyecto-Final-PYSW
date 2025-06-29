@@ -12,10 +12,6 @@
     transition: color 0.3s ease;
 }
 
-.navbar-brand:hover {
-    color: #ffc107 !important;
-    /* Color amarillo tipo warning */
-}
 
 /* Dropdown menu */
 .dropdown-menu {

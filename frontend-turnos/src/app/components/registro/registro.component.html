@@ -21,13 +21,20 @@
 
                 <button class="btn btn-success w-100" type="submit">Registrarse</button>
             </form>
+
             <p class="mt-3 text-center">
                 ¿Si tienes cuenta?
                 <a class="btn btn-link w-100" [routerLink]="['/login']">Ingresa</a>
-
             </p>
-
-
         </div>
     </div>
+</div>
+
+<!-- NOTIFICACIÓN TOAST -->
+<div *ngIf="showMessage" class="toast-notification" [ngClass]="{
+       'show': showMessage,
+       'toast-success': messageType === 'success',
+       'toast-danger': messageType === 'danger'
+     }">
+    <p>{{ messageText }}</p>
 </div>

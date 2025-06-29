@@ -6,3 +6,40 @@
     <button type="submit" [disabled]="form.invalid">Registrar</button>
 </form>
 <p *ngIf="mensaje">{{ mensaje }}</p>
+
+<hr>
+<h4>Registrar nueva especialidad</h4>
+<form (ngSubmit)="crearEspecialidad()" #formEsp="ngForm" class="row g-3 mt-2">
+
+    <div class="col-md-6">
+        <input [(ngModel)]="especialidadNombre" name="nombreEspecialidad" required placeholder="Nombre de especialidad"
+            class="form-control" />
+    </div>
+
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary" [disabled]="formEsp.invalid">Registrar especialidad</button>
+    </div>
+
+    <p class="text-success mt-2" *ngIf="mensajeEspecialidad">{{ mensajeEspecialidad }}</p>
+</form>
+
+<!-- Lista de especialidades -->
+<div class="mt-4">
+    <h5>Especialidades registradas</h5>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let esp of especialidades">
+                <td>{{ esp.nombre }}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" (click)="eliminarEspecialidad(esp._id)">Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
