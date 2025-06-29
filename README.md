@@ -4,7 +4,9 @@ Este sistema permite la gestión de turnos médicos para una clínica, incluyend
 Deben clonar el repositorio:
 
 1- git clone https://github.com/AgustinCruz18/Proyecto-Final-PYSW.git 
+
  ahí se van 
+ 
 2- cd Proyecto-Final-PYSW
 
 Y ahí instalan dependencias del frontend y backend:
