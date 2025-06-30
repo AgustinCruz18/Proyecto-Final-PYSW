@@ -88,7 +88,7 @@ router.post('/crear-secretaria', verificarAdmin, async (req, res) => {
         res.status(500).json({ message: 'Error al registrar secretaria' });
     }
 });
-/*Ruta temporal para crear un administrador
+/*Ruta temporal para crear un administrador<
 router.post('/crear-admin', async (req, res) => {
     const { nombre, email, password } = req.body;
     try {

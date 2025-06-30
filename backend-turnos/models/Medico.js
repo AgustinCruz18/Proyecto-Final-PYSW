@@ -4,7 +4,9 @@ const Schema = mongoose.Schema;
 const medicoSchema = new Schema({
     nombre: String,
     apellido: String,
-    especialidad: { type: Schema.Types.ObjectId, ref: 'Especialidad', required: true }
+    especialidad: { type: Schema.Types.ObjectId, ref: 'Especialidad', required: true },
+    precio: {type: Number, default: 0}
+
 });
 
 module.exports = mongoose.model('Medico', medicoSchema);

@@ -90,30 +90,58 @@ export class DashboardPacienteComponent implements OnInit {
   }
 
   confirmarReserva() {
-    if (!this.obraSocialSeleccionada || !this.obraSocialSeleccionada.nombre) {
-      this.mensaje = 'Debe seleccionar una obra social válida.';
+  if (!this.obraSocialSeleccionada || !this.obraSocialSeleccionada.nombre) {
+    this.mensaje = 'Debe seleccionar una obra social válida.';
+    return;
+  }
+
+  if (!this.ficha.autorizada && this.obraSocialSeleccionada.nombre !== 'Particular') {
+    this.mensaje = 'Tu obra social aún no está autorizada. Podés sacar turno solo como Particular.';
+    return;
+  }
+
+  
+  const turno = this.turnos.find(t => t._id === this.turnoAReservarId);
+  if (!turno) {
+    this.mensaje = 'No se encontró el turno seleccionado.';
+    return;
+  }
+
+  
+  this.pagarTurno(turno);
+
+}
+
+    pagarTurno(turno: any) {
+    const obraSocial = this.ficha?.obraSocial?.nombre || 'Particular';
+    const email = this.ficha?.email || 'paciente@email.com';
+
+    if (!turno.medico || !turno.especialidad) {
+      alert('Faltan datos para procesar el pago.');
       return;
     }
 
-    if (!this.ficha.autorizada && this.obraSocialSeleccionada.nombre !== 'Particular') {
-      this.mensaje = 'Tu obra social aún no está autorizada. Podés sacar turno solo como Particular.';
-      return;
-    }
-
-    this.turnoService.reservarTurno(this.turnoAReservarId, this.idUsuario, this.obraSocialSeleccionada).subscribe({
-      next: () => {
-        this.mensaje = 'Turno reservado correctamente';
-        this.mostrarFormularioReserva = false;
-        this.obraSocialSeleccionada = null;
-        this.cargarTurnos();
+    this.http.post<any>('http://localhost:5000/api/mercadopago/pago', {
+      idTurno: turno._id,
+      idMedico: turno.medico._id,
+      idEspecialidad: turno.especialidad._id,
+      obra_social: obraSocial,
+      payer_email: email
+    }).subscribe({
+      next: (res) => {
+        if (res.init_point) {
+          localStorage.setItem('turnoAPagar', JSON.stringify(turno));
+          window.location.href = res.init_point;
+        } else {
+          alert('No se pudo generar el link de pago.');
+        }
       },
-      error: () => {
-        this.mensaje = 'Error al reservar turno';
-        this.mostrarFormularioReserva = false;
+      error: (err) => {
+        console.error(err);
+        alert('Error al generar link de pago.');
       }
     });
   }
-
   consultarIA() {
     if (!this.pregunta.trim()) return;
 

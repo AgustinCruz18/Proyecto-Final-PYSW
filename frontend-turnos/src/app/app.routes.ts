@@ -7,6 +7,9 @@ import { DashboardPacienteComponent } from './components/dashboard-paciente/dash
 import { RegistroComponent } from './components/registro/registro.component';
 import { PortadaComponent } from './components/portada/portada.component';
 import { DatosPersonalesComponent } from './components/datos-personales/datos-personales.component';
+import { PagoExitosoComponent } from './components/pago-exitoso/pago-exitoso.component';
+import { PagoPendienteComponent } from './components/pago-pendiente/pago-pendiente.component';
+import { PagoFallidoComponent } from './components/pago-fallido/pago-fallido.component';
 
 
 export const routes: Routes = [
@@ -19,7 +22,10 @@ export const routes: Routes = [
     { path: 'paciente/:id', component: DashboardPacienteComponent },
     { path: 'datos-personales/:id', component: DatosPersonalesComponent },
     { path: 'secretaria', component: DashboardSecretariaComponent },
-    { path: '**', redirectTo: 'portada' }
+    { path: '**', redirectTo: 'portada' },
+    { path: 'pago/exitoso', component: PagoExitosoComponent },
+    { path: 'pago/pendiente', component: PagoPendienteComponent },
+    { path: 'pago/fallido', component: PagoFallidoComponent }
 ];
 
 @NgModule({

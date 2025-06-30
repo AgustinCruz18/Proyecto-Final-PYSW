@@ -11,7 +11,8 @@ const turnoSchema = new Schema({
     paciente: { type: Schema.Types.ObjectId, ref: 'User' },
     estado: { type: String, enum: ['disponible', 'ocupado'], default: 'disponible' },
     eventoGoogleId: { type: String },
-    duracion: { type: Number, default: 30 }
+    duracion: { type: Number, default: 30 },
+    precio_base: {type: Number, default: 5000}
 });
 
 module.exports = mongoose.model('Turno', turnoSchema);

@@ -28,6 +28,9 @@ app.use('/api/especialidades', especialidadRoutes);
 app.use('/api/medicos', medicoRoutes);
 app.use('/api/horarios', horarioRoutes);
 app.use('/api/turnos', turnoRoutes);
+
+app.use('/api/mercadopago', require('./routes/mercadoPagoRoutes'));
+
 // Conexión con MongoDB
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {

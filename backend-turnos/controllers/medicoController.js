@@ -8,7 +8,7 @@ exports.crear = async (req, res) => {
         if (!especialidadExiste) {
             return res.status(404).json({ message: 'Especialidad no encontrada' });
         }
-        const medico = new Medico({ nombre, apellido, especialidad });
+        const medico = new Medico({ nombre, apellido, especialidad, precio });
         await medico.save();
         res.status(201).json(medico);
     } catch (err) {
