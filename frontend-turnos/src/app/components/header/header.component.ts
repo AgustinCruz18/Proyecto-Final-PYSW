@@ -41,7 +41,7 @@ export class HeaderComponent {
   irADatosPersonales() {
     const id = this.user()?.id;
     if (id) {
-      this.router.navigate([`/datos-personales/${id}`]);
+      this.router.navigate([`/detalle-paciente/${id}`]);
     }
   }
 

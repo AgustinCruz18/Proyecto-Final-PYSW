@@ -138,7 +138,8 @@ export class DatosPersonalesComponent implements OnInit {
           ? 'Ficha guardada correctamente.'
           : 'Ficha actualizada correctamente.';
         this.esNuevaFicha = false;
-        this.mostrarModalConFocoSeguro();
+        //this.mostrarModalConFocoSeguro();
+        this.mostrarModalConFocoSeguro(true);
       },
       error: (err) => {
         console.error('Error al guardar:', err);
@@ -147,8 +148,8 @@ export class DatosPersonalesComponent implements OnInit {
       }
     });
   }
-
-  mostrarModalConFocoSeguro(): void {
+  
+  mostrarModalConFocoSeguro(redirigir: boolean = false): void {
     const modalElement = document.getElementById('confirmModal');
     const submitBtn = document.querySelector('button[type="submit"]') as HTMLElement;
 
@@ -165,12 +166,19 @@ export class DatosPersonalesComponent implements OnInit {
       modalElement.addEventListener('hidden.bs.modal', () => {
         setTimeout(() => {
           submitBtn?.focus();
+          if (redirigir) {
+            this.router.navigate([`/detalle-paciente/${this.userId}`]); // 👉 Redirigir después de cerrar el modal
+          }
         }, 100);
       }, { once: true });
     } else {
       alert(this.mensajeModal);
+      if (redirigir) {
+        this.router.navigate([`/detalle-paciente/${this.userId}`]);
+      }
     }
   }
+
 
   agregarSegundaObraSocial(): void {
     this.mostrarSegundaObra = true;
