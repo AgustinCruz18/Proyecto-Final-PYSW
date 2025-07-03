@@ -1,108 +1,84 @@
 <div *ngIf="mostrarAlerta" class="alert alert-warning text-center" role="alert">
-    ⚠️ ¡Completá tus
-    <a [routerLink]="['/datos-personales', idUsuario]">datos personales</a>
-    para poder gestionar turnos!
+  ⚠️ ¡Completá tus
+  <a [routerLink]="['/datos-personales', idUsuario]">datos personales</a>
+  para poder gestionar turnos!
 </div>
+
 <br>
 
 <div class="row mt-4">
-    <div [ngClass]="{'col-md-8': showChatPanel, 'col-md-12': !showChatPanel}">
-        <div class="formulario-turno" *ngIf="ficha">
-            <h2 class="text-center mb-4">Bienvenido, {{ ficha.nombreCompleto }}</h2>
+  <div [ngClass]="{'col-md-8': showChatPanel, 'col-md-12': !showChatPanel}">
+    <div class="formulario-turno" *ngIf="ficha">
+      <h2 class="text-center mb-4">Bienvenido, {{ ficha.nombreCompleto }}</h2>
 
-            <div class="form-group">
-                <label>Especialidad:</label>
-                <select [(ngModel)]="especialidadSeleccionada" (change)="cargarMedicos()" class="form-control">
-                    <option disabled selected value="">Seleccionar especialidad</option>
-                    <option *ngFor="let e of especialidades" [value]="e._id">{{ e.nombre }}</option>
-                </select>
-            </div>
+      <div class="form-group">
+        <label>Especialidad:</label>
+        <select [(ngModel)]="especialidadSeleccionada" (change)="cargarMedicos()" class="form-control">
+          <option disabled selected value="">Seleccionar especialidad</option>
+          <option *ngFor="let e of especialidades" [value]="e._id">{{ e.nombre }}</option>
+        </select>
+      </div>
 
-            <div class="form-group" *ngIf="medicos.length > 0">
-                <label>Médico:</label>
-                <select [(ngModel)]="medicoSeleccionado" (change)="cargarTurnos()" class="form-control">
-                    <option disabled selected value="">Seleccionar médico</option>
-                    <option *ngFor="let m of medicos" [value]="m._id">{{ m.nombre }} {{ m.apellido }}</option>
-                </select>
-            </div>
+      <div class="form-group" *ngIf="medicos.length > 0">
+        <label>Médico:</label>
+        <select [(ngModel)]="medicoSeleccionado" (change)="cargarTurnos()" class="form-control">
+          <option disabled selected value="">Seleccionar médico</option>
+          <option *ngFor="let m of medicos" [value]="m._id">{{ m.nombre }} {{ m.apellido }}</option>
+        </select>
+      </div>
 
-            <div class="turnos-container" *ngIf="turnos.length > 0">
-                <h5>Turnos disponibles:</h5>
-                <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center"
-                        *ngFor="let t of turnos">
-                        <span>{{ t.fecha | date:'fullDate' }} - {{ t.hora }}</span>
-                        <button class="btn btn-success btn-sm" (click)="reservar(t._id)">Reservar</button>
-                    </li>
-                </ul>
-            </div>
+      <div class="turnos-container" *ngIf="turnos.length > 0">
+        <h5>Turnos disponibles:</h5>
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let t of turnos">
+            <span>{{ t.fecha | date:'fullDate' }} - {{ t.hora }}</span>
+            <button class="btn btn-success btn-sm" (click)="pagarTurno(t)">Pagar</button>
+          </li>
+        </ul>
+      </div>
 
-            <div *ngIf="mostrarFormularioReserva" class="confirmacion-form mt-4">
-                <h5>Confirmar reserva de turno</h5>
-                <form (ngSubmit)="confirmarReserva()">
-                    <div class="form-group">
-                        <label>Obra Social:</label>
-                        <select class="form-select" [(ngModel)]="obraSocialSeleccionada" name="obraSocialSeleccionada"
-                            required>
-                            <ng-container *ngIf="ficha.autorizada; else soloParticular">
-                                <option *ngFor="let os of ficha.obrasSociales" [ngValue]="os">{{ os.nombre }}</option>
-                                <option [ngValue]="{ nombre: 'Particular', numeroSocio: 'N/A' }">Particular</option>
-                            </ng-container>
-                            <ng-template #soloParticular>
-                                <option [ngValue]="{ nombre: 'Particular', numeroSocio: 'N/A' }">Particular</option>
-                            </ng-template>
-                        </select>
-                    </div>
+      <div *ngIf="mensaje" class="alert mt-3" [ngClass]="{
+          'alert-success': mensaje.includes('correctamente'),
+          'alert-danger': mensaje.includes('Error')
+        }">
+        {{ mensaje }}
+      </div>
+    </div>
+  </div>
 
-                    <div class="botones mt-3">
-                        <button type="submit" class="btn btn-primary w-100">Confirmar Reserva</button>
-                        <button type="button" class="btn btn-secondary w-100 mt-2"
-                            (click)="cancelarReserva()">Cancelar</button>
-                    </div>
-                </form>
-            </div>
-
-            <div *ngIf="mensaje" class="alert mt-3" [ngClass]="{
-                'alert-success': mensaje.includes('correctamente'),
-                'alert-danger': mensaje.includes('Error')
+  <div class="col-md-4" *ngIf="showChatPanel">
+    <div class="card shadow border-0">
+      <div class="card-header bg-primary text-white">
+        🤖 Asistente Virtual
+      </div>
+      <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+        <div *ngFor="let msg of mensajes">
+          <div [ngClass]="{
+              'text-end': msg.origen === 'paciente',
+              'text-start': msg.origen === 'ia'
             }">
-                {{ mensaje }}
+            <span class="badge bg-secondary mb-1">{{ msg.origen === 'paciente' ? '👤 Tú' : '🤖 IA' }}</span>
+            <div class="alert" [ngClass]="{
+                'alert-primary': msg.origen === 'paciente',
+                'alert-light border': msg.origen === 'ia'
+              }">
+              <div [innerHtml]="msg.texto | safeHtml"></div>
             </div>
+          </div>
         </div>
+      </div>
+      <div class="card-footer p-2">
+        <form (ngSubmit)="consultarIA()">
+          <div class="input-group">
+            <input [(ngModel)]="pregunta" name="pregunta" class="form-control" placeholder="Preguntá algo..." required />
+            <button type="submit" class="btn btn-primary">Enviar</button>
+          </div>
+        </form>
+      </div>
     </div>
-    <div class="col-md-4" *ngIf="showChatPanel">
-        <div class="card shadow border-0">
-            <div class="card-header bg-primary text-white">
-                🤖 Asistente Virtual
-            </div>
-            <div class="card-body" style="max-height: 400px; overflow-y: auto;">
-                <div *ngFor="let msg of mensajes">
-                    <div [ngClass]="{
-                        'text-end': msg.origen === 'paciente',
-                        'text-start': msg.origen === 'ia'
-                    }">
-                        <span class="badge bg-secondary mb-1">{{ msg.origen === 'paciente' ? '👤 Tú' : '🤖 IA' }}</span>
-                        <div class="alert" [ngClass]="{
-                            'alert-primary': msg.origen === 'paciente',
-                            'alert-light border': msg.origen === 'ia'
-                        }">
-                            <div [innerHtml]="msg.texto | safeHtml"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer p-2">
-                <form (ngSubmit)="consultarIA()">
-                    <div class="input-group">
-                        <input [(ngModel)]="pregunta" name="pregunta" class="form-control"
-                            placeholder="Preguntá algo..." required />
-                        <button type="submit" class="btn btn-primary">Enviar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
+
 <button (click)="toggleChatPanel()" class="chat-toggle-button">
-    {{ showChatPanel ? 'Ocultar Chat 💬' : 'Mostrar Asistente 💬' }}
+  {{ showChatPanel ? 'Ocultar Chat 💬' : 'Mostrar Asistente 💬' }}
 </button>

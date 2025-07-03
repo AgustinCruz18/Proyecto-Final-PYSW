@@ -113,35 +113,44 @@ export class DashboardPacienteComponent implements OnInit {
 }
 
     pagarTurno(turno: any) {
-    const obraSocial = this.ficha?.obraSocial?.nombre || 'Particular';
-    const email = this.ficha?.email || 'paciente@email.com';
+  const idTurno = turno._id;
+  const idMedico = this.medicoSeleccionado;
+  const idEspecialidad = this.especialidadSeleccionada;
+  const obraSocial = this.ficha?.obraSocial?.nombre || 'Particular';
+  const email = this.ficha?.email || 'test@email.com';
 
-    if (!turno.medico || !turno.especialidad) {
-      alert('Faltan datos para procesar el pago.');
-      return;
-    }
+  console.log("Enviando al backend:", {
+    idTurno, idMedico, idEspecialidad, obra_social: obraSocial, payer_email: email
+  });
 
-    this.http.post<any>('http://localhost:5000/api/mercadopago/pago', {
-      idTurno: turno._id,
-      idMedico: turno.medico._id,
-      idEspecialidad: turno.especialidad._id,
-      obra_social: obraSocial,
-      payer_email: email
-    }).subscribe({
-      next: (res) => {
-        if (res.init_point) {
-          localStorage.setItem('turnoAPagar', JSON.stringify(turno));
-          window.location.href = res.init_point;
-        } else {
-          alert('No se pudo generar el link de pago.');
-        }
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Error al generar link de pago.');
-      }
-    });
+  if (!idTurno || !idMedico || !idEspecialidad || !obraSocial || !email) {
+    alert('Faltan datos para generar el pago.');
+    return;
   }
+
+  this.http.post<any>('http://localhost:5000/api/mercadopago/pago', {
+    idTurno,
+    idMedico,
+    idEspecialidad,
+    obra_social: obraSocial,
+    payer_email: email
+  }).subscribe({
+    next: (res) => {
+      if (res.init_point) {
+        localStorage.setItem('turnoAPagar', JSON.stringify(turno));
+        window.location.href = res.init_point;
+      } else {
+        alert('No se pudo generar el link de pago.');
+      }
+    },
+    error: (err) => {
+      console.error(err);
+      alert('Error al generar link de pago.');
+    }
+  });
+}
+
+
   consultarIA() {
     if (!this.pregunta.trim()) return;
 
