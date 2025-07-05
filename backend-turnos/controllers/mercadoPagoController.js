@@ -1,15 +1,14 @@
+// backend-turnos/controllers/mercadoPagoController.js
 const axios = require('axios');
 require('dotenv').config();
 
 const Turno = require('../models/Turno');
-const Medico = require('../models/Medico');
-const Especialidad = require('../models/Especialidad');
 
 const mercadoPagoCtrl = {};
 
 mercadoPagoCtrl.generarPago = async (req, res) => {
   try {
-    const { idTurno, idMedico, idEspecialidad, obra_social, payer_email } = req.body;
+    const { idTurno, obra_social, payer_email } = req.body;
 
     const descuentosObraSocial = {
       "OSDE": 0.3,
@@ -20,22 +19,19 @@ mercadoPagoCtrl.generarPago = async (req, res) => {
     };
 
     const turno = await Turno.findById(idTurno);
-    const medico = await Medico.findById(idMedico);
-    const especialidad = await Especialidad.findById(idEspecialidad);
-
-    if (!turno || !medico || !especialidad) {
-      return res.status(400).json({ msg: 'Datos inválidos para el cálculo del pago.' });
+    if (!turno) {
+      return res.status(400).json({ msg: 'Turno no encontrado.' });
     }
 
-    const subtotal = turno.precio_base + medico.precio + especialidad.precio;
+    const precioBase = 5000;
     const descuento = descuentosObraSocial[obra_social] || 0;
-    const precioFinal = parseFloat((subtotal * (1 - descuento)).toFixed(2));
+    const precioFinal = parseFloat((precioBase * (1 - descuento)).toFixed(2));
 
     const body = {
       payer_email,
       items: [{
-        title: `Turno con ${medico.nombre}`,
-        description: `Especialidad: ${especialidad.nombre}`,
+        title: `Reserva de turno médico`,
+        description: `Obra social: ${obra_social}`,
         quantity: 1,
         unit_price: precioFinal
       }],
@@ -53,9 +49,9 @@ mercadoPagoCtrl.generarPago = async (req, res) => {
       }
     });
 
-    res.status(200).json(response.data);
+    res.status(200).json({ init_point: response.data.init_point });
   } catch (error) {
-    console.error(error);
+    console.error('❌ Error al generar el pago:', error.response?.data || error.message);
     res.status(500).json({ msg: 'Error al generar el pago avanzado' });
   }
 };

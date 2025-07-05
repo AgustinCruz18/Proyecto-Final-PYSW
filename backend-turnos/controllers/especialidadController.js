@@ -1,3 +1,4 @@
+// backend-turnos/controllers/especialidadController.js
 const Especialidad = require('../models/Especialidad');
 
 exports.crear = async (req, res) => {

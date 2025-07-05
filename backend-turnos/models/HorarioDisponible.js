@@ -1,3 +1,4 @@
+//backend-turnos/models/HorarioDisponible.js
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 

@@ -1,3 +1,4 @@
+//backend-turnos/controllers/authController.js
 const jwt = require('jsonwebtoken');
 
 exports.googleCallback = async (req, res) => {

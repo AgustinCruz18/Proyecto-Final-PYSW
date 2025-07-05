@@ -32,9 +32,42 @@
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let t of turnos">
             <span>{{ t.fecha | date:'fullDate' }} - {{ t.hora }}</span>
-            <button class="btn btn-success btn-sm" (click)="pagarTurno(t)">Pagar</button>
+            <button class="btn btn-success btn-sm" (click)="prepararReserva(t)">Reservar</button>
           </li>
         </ul>
+      </div>
+
+      <div *ngIf="mostrarFormularioReserva" class="confirmacion-form mt-4">
+        <h4>Confirmar Reserva</h4>
+        <p *ngIf="turnoParaPagar">
+          **Turno seleccionado:** {{ turnoParaPagar.fecha | date:'fullDate' }} - {{ turnoParaPagar.hora }} con el
+          Dr./Dra. {{ medicoSeleccionadoNombre }}
+        </p>
+
+        <form (ngSubmit)="confirmarReserva()">
+          <div class="form-group mt-3">
+            <label for="obraSocialSelect">Obra Social:</label>
+            <select [(ngModel)]="obraSocialSeleccionada" name="obraSocialSelect" (change)="actualizarPrecio()"
+              class="form-control">
+              <ng-container *ngIf="ficha?.obrasSociales?.length > 0; else soloParticular">
+                <option *ngFor="let os of ficha.obrasSociales" [ngValue]="os">{{ os.nombre }}</option>
+                <option [ngValue]="{ nombre: 'Particular', numeroSocio: 'N/A' }">Particular</option>
+              </ng-container>
+              <ng-template #soloParticular>
+                <option [ngValue]="{ nombre: 'Particular', numeroSocio: 'N/A' }">Particular</option>
+              </ng-template>
+            </select>
+          </div>
+
+          <div class="mt-3">
+            <strong>Precio total:</strong> ${{ precioConDescuento }}
+          </div>
+
+          <div class="botones mt-3">
+            <button type="submit" class="btn btn-primary w-100">Confirmar Reserva y Pagar</button>
+            <button type="button" class="btn btn-secondary w-100 mt-2" (click)="cancelarReserva()">Cancelar</button>
+          </div>
+        </form>
       </div>
 
       <div *ngIf="mensaje" class="alert mt-3" [ngClass]="{
@@ -70,7 +103,8 @@
       <div class="card-footer p-2">
         <form (ngSubmit)="consultarIA()">
           <div class="input-group">
-            <input [(ngModel)]="pregunta" name="pregunta" class="form-control" placeholder="Preguntá algo..." required />
+            <input [(ngModel)]="pregunta" name="pregunta" class="form-control" placeholder="Preguntá algo..."
+              required />
             <button type="submit" class="btn btn-primary">Enviar</button>
           </div>
         </form>

@@ -73,7 +73,20 @@ exports.reservar = async (req, res) => {
         const paciente = await User.findById(pacienteId);
         const especialidad = await Especialidad.findById(turno.especialidad);
 
-        // Aquí se usa la fecha y hora del turno existente para el evento de Google Calendar
+        // Calcular precio pagado según obra social
+        const descuentosObraSocial = {
+            "OSDE": 0.3,
+            "Swiss Medical": 0.25,
+            "IOSFA": 0.2,
+            "Otra": 0.1,
+            "Particular": 0
+        };
+
+        const precioBase = 5000;
+        const descuento = descuentosObraSocial[obraSocialElegida.nombre] || 0;
+        const precioFinal = parseFloat((precioBase * (1 - descuento)).toFixed(2));
+
+        // Google Calendar
         const fechaTurno = new Date(turno.fecha);
         const [hours, minutes] = turno.hora.split(':').map(Number);
         fechaTurno.setHours(hours, minutes, 0, 0);
@@ -89,14 +102,16 @@ exports.reservar = async (req, res) => {
             attendees: [{ email: paciente.email }]
         });
 
-        // Guardar info en turno
+        // Guardar en base de datos
         turno.estado = 'ocupado';
         turno.paciente = pacienteId;
         turno.obraSocial = {
             nombre: obraSocialElegida.nombre,
             numeroSocio: obraSocialElegida.numeroSocio || 'N/A'
         };
-        turno.eventoGoogleId = evento.id; // 🔁 Guardar ID del evento
+        turno.precioPagado = precioFinal;
+        turno.eventoGoogleId = evento.id;
+
         await turno.save();
 
         res.json({ message: 'Turno reservado con éxito', turno });
@@ -105,6 +120,7 @@ exports.reservar = async (req, res) => {
         res.status(500).json({ message: 'Error del servidor' });
     }
 };
+
 
 exports.eliminar = async (req, res) => {
     try {

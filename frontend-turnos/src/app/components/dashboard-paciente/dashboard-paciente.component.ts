@@ -27,13 +27,19 @@ export class DashboardPacienteComponent implements OnInit {
   turnos: any[] = [];
   especialidadSeleccionada = '';
   medicoSeleccionado = '';
+  medicoSeleccionadoNombre: string = '';
   mensaje = '';
   turnoAReservarId: string = '';
-  obraSocialSeleccionada: any = null;
+  obraSocialSeleccionada: any = null; // Inicializado a null o un objeto por defecto
   mostrarFormularioReserva: boolean = false;
   pregunta: string = '';
   mensajes: { origen: 'paciente' | 'ia'; texto: string }[] = [];
   showChatPanel: boolean = false;
+
+  // Propiedades para el manejo de precios
+  precioBase: number = 5000;
+  precioConDescuento: number = 5000;
+  turnoParaPagar: any = null; // Para almacenar el objeto turno seleccionado para la confirmación
 
   constructor(
     private route: ActivatedRoute,
@@ -49,6 +55,15 @@ export class DashboardPacienteComponent implements OnInit {
           this.ficha = ficha;
           this.mostrarAlerta = false;
           this.cargarEspecialidades();
+
+          // ✅ SOLUCIÓN 1: Corrige el ngOnInit para seleccionar la primera obra social válida del array
+          if (this.ficha.obrasSociales?.length > 0) {
+            this.obraSocialSeleccionada = this.ficha.obrasSociales[0];
+          } else {
+            this.obraSocialSeleccionada = { nombre: 'Particular', numeroSocio: 'N/A' };
+          }
+
+          this.actualizarPrecio(); // Calcula el precio inicial al cargar la ficha
         } else {
           this.mostrarAlerta = true;
         }
@@ -59,6 +74,33 @@ export class DashboardPacienteComponent implements OnInit {
     });
   }
 
+  /**
+   * Actualiza el precio con descuento basado en la obra social seleccionada.
+   */
+  actualizarPrecio() {
+    const descuento = this.obtenerDescuento(this.obraSocialSeleccionada?.nombre);
+    this.precioConDescuento = this.precioBase * (1 - descuento);
+  }
+
+  /**
+   * Obtiene el porcentaje de descuento para una obra social dada.
+   * @param obraSocial Nombre de la obra social.
+   * @returns Porcentaje de descuento (ej. 0.3 para 30%).
+   */
+  obtenerDescuento(obraSocial: string): number {
+    switch (obraSocial) {
+      case 'OSDE': return 0.3;
+      case 'Swiss Medical': return 0.25;
+      case 'IOSFA': return 0.2;
+      case 'Otra': return 0.1;
+      case 'Particular': return 0; // Sin descuento para "Particular"
+      default: return 0;
+    }
+  }
+
+  /**
+   * Carga las especialidades médicas desde el backend.
+   */
   cargarEspecialidades() {
     this.http.get<any[]>('http://localhost:5000/api/especialidades').subscribe({
       next: data => this.especialidades = data,
@@ -66,101 +108,125 @@ export class DashboardPacienteComponent implements OnInit {
     });
   }
 
+  /**
+   * Carga los médicos filtrados por la especialidad seleccionada.
+   */
   cargarMedicos() {
     this.http.get<any[]>('http://localhost:5000/api/medicos').subscribe({
       next: data => {
         this.medicos = data.filter(m => m.especialidad?._id === this.especialidadSeleccionada);
-        this.turnos = [];
+        this.turnos = []; // Limpia los turnos al cambiar de médico
+        this.medicoSeleccionadoNombre = ''; // Limpia el nombre del médico seleccionado
       },
       error: err => console.error('Error cargando médicos', err)
     });
   }
 
+  /**
+   * Carga los turnos disponibles para el médico seleccionado.
+   */
   cargarTurnos() {
     this.turnoService.obtenerTurnosPorMedico(this.medicoSeleccionado).subscribe({
-      next: data => this.turnos = data as any[],
+      next: data => {
+        this.turnos = data as any[];
+        // Encuentra el nombre completo del médico seleccionado para mostrarlo en el formulario de confirmación
+        const selectedMedico = this.medicos.find(m => m._id === this.medicoSeleccionado);
+        if (selectedMedico) {
+          this.medicoSeleccionadoNombre = `${selectedMedico.nombre} ${selectedMedico.apellido}`;
+        }
+      },
       error: err => console.error('Error al cargar turnos', err)
     });
   }
 
-  reservar(turnoId: string) {
-    this.turnoAReservarId = turnoId;
-    this.mostrarFormularioReserva = true;
-    this.mensaje = '';
+  /**
+   * Prepara el formulario de reserva mostrando los detalles del turno y el precio.
+   * @param turno Objeto del turno a reservar.
+   */
+  prepararReserva(turno: any) {
+    this.turnoParaPagar = turno; // Almacena el objeto completo del turno
+    this.turnoAReservarId = turno._id; // Almacena solo el ID para la reserva
+    this.mostrarFormularioReserva = true; // Muestra el formulario de confirmación
+    this.mensaje = ''; // Limpia cualquier mensaje anterior
+    this.actualizarPrecio(); // Recalcula el precio al seleccionar un turno
   }
 
+  /**
+   * Confirma la reserva y procede con el pago a través de Mercado Pago.
+   */
   confirmarReserva() {
-  if (!this.obraSocialSeleccionada || !this.obraSocialSeleccionada.nombre) {
-    this.mensaje = 'Debe seleccionar una obra social válida.';
-    return;
-  }
+    const obraSocialNombre = this.obraSocialSeleccionada?.nombre;
 
-  if (!this.ficha.autorizada && this.obraSocialSeleccionada.nombre !== 'Particular') {
-    this.mensaje = 'Tu obra social aún no está autorizada. Podés sacar turno solo como Particular.';
-    return;
-  }
-
-  
-  const turno = this.turnos.find(t => t._id === this.turnoAReservarId);
-  if (!turno) {
-    this.mensaje = 'No se encontró el turno seleccionado.';
-    return;
-  }
-
-  
-  this.pagarTurno(turno);
-
-}
-
-    pagarTurno(turno: any) {
-  const idTurno = turno._id;
-  const idMedico = this.medicoSeleccionado;
-  const idEspecialidad = this.especialidadSeleccionada;
-  const obraSocial = this.ficha?.obraSocial?.nombre || 'Particular';
-  const email = this.ficha?.email || 'test@email.com';
-
-  console.log("Enviando al backend:", {
-    idTurno, idMedico, idEspecialidad, obra_social: obraSocial, payer_email: email
-  });
-
-  if (!idTurno || !idMedico || !idEspecialidad || !obraSocial || !email) {
-    alert('Faltan datos para generar el pago.');
-    return;
-  }
-
-  this.http.post<any>('http://localhost:5000/api/mercadopago/pago', {
-    idTurno,
-    idMedico,
-    idEspecialidad,
-    obra_social: obraSocial,
-    payer_email: email
-  }).subscribe({
-    next: (res) => {
-      if (res.init_point) {
-        localStorage.setItem('turnoAPagar', JSON.stringify(turno));
-        window.location.href = res.init_point;
-      } else {
-        alert('No se pudo generar el link de pago.');
-      }
-    },
-    error: (err) => {
-      console.error(err);
-      alert('Error al generar link de pago.');
+    // Validaciones
+    if (!obraSocialNombre) {
+      this.mensaje = 'Debe seleccionar una obra social válida.';
+      return;
     }
-  });
-}
 
+    if (!this.ficha.autorizada && obraSocialNombre !== 'Particular') {
+      this.mensaje = 'Tu obra social aún no está autorizada. Podés sacar turno solo como Particular.';
+      return;
+    }
 
+    if (!this.turnoParaPagar) {
+      this.mensaje = 'No se encontró el turno seleccionado para confirmar.';
+      return;
+    }
+
+    // Datos para el backend de Mercado Pago
+    const idTurno = this.turnoParaPagar._id;
+    const idMedico = this.medicoSeleccionado;
+    const idEspecialidad = this.especialidadSeleccionada;
+    const obraSocial = obraSocialNombre || 'Particular'; // Asegura un valor por defecto
+    const email = this.ficha?.email || 'test@email.com'; // Email del pagador, con fallback
+
+    console.log("Enviando al backend:", {
+      idTurno, idMedico, idEspecialidad, obra_social: obraSocial, payer_email: email, precio: this.precioConDescuento
+    });
+
+    if (!idTurno || !idMedico || !idEspecialidad || !obraSocial || !email) {
+      this.mensaje = 'Faltan datos para generar el pago.';
+      return;
+    }
+
+    // Llamada al backend para generar el link de pago de Mercado Pago
+    this.http.post<any>('http://localhost:5000/api/mercadopago/pago', {
+      idTurno,
+      idMedico,
+      idEspecialidad,
+      obra_social: obraSocial,
+      payer_email: email,
+      precio: this.precioConDescuento // Pasa el precio calculado al backend
+    }).subscribe({
+      next: (res) => {
+        if (res.init_point) {
+          localStorage.setItem('turnoAPagar', JSON.stringify(this.turnoParaPagar));
+          window.location.href = res.init_point; // Redirige al usuario al portal de pago
+          this.mostrarFormularioReserva = false; // Oculta el formulario después de la redirección
+        } else {
+          this.mensaje = 'No se pudo generar el link de pago.';
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.mensaje = 'Error al generar link de pago.';
+      }
+    });
+  }
+
+  /**
+   * Envía la pregunta del paciente al asistente virtual (IA).
+   */
   consultarIA() {
     if (!this.pregunta.trim()) return;
 
     const mensajeUsuario = this.pregunta;
-    this.mensajes.push({ origen: 'paciente', texto: mensajeUsuario });
-    this.pregunta = '';
+    this.mensajes.push({ origen: 'paciente', texto: mensajeUsuario }); // Agrega el mensaje del usuario
+    this.pregunta = ''; // Limpia el input
 
     this.http.post<any>('http://localhost:5000/api/ia', { pregunta: mensajeUsuario }).subscribe({
       next: res => {
-        this.mensajes.push({ origen: 'ia', texto: res.respuesta });
+        this.mensajes.push({ origen: 'ia', texto: res.respuesta }); // Agrega la respuesta de la IA
       },
       error: () => {
         this.mensajes.push({ origen: 'ia', texto: ' Error al conectar con el asistente.' });
@@ -168,16 +234,34 @@ export class DashboardPacienteComponent implements OnInit {
     });
   }
 
+  /**
+   * Cancela el proceso de reserva y oculta el formulario.
+   */
   cancelarReserva() {
     this.turnoAReservarId = '';
-    this.mostrarFormularioReserva = false;
-    this.obraSocialSeleccionada = null;
+    this.turnoParaPagar = null; // Limpia el turno seleccionado
+    this.mostrarFormularioReserva = false; // Oculta el formulario de confirmación
+    // Restablece la obra social seleccionada a la primera de la ficha o a 'Particular'
+    if (this.ficha?.obrasSociales?.length > 0) {
+      this.obraSocialSeleccionada = this.ficha.obrasSociales[0];
+    } else {
+      this.obraSocialSeleccionada = { nombre: 'Particular', numeroSocio: 'N/A' };
+    }
+    this.actualizarPrecio(); // Recalcula el precio al cancelar
+    this.mensaje = ''; // Limpia cualquier mensaje
   }
 
+  /**
+   * Cierra la sesión del usuario.
+   */
   logout() {
     localStorage.removeItem('token');
     window.location.href = '/login';
   }
+
+  /**
+   * Alterna la visibilidad del panel del chat.
+   */
   toggleChatPanel() {
     this.showChatPanel = !this.showChatPanel;
   }

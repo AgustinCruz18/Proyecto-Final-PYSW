@@ -1,3 +1,4 @@
+// backend-turnos/controllers/fichaPacienteController.js
 const FichaPaciente = require('../models/FichaPaciente');
 
 exports.getFicha = async (req, res) => {

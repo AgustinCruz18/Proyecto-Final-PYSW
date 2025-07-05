@@ -12,7 +12,11 @@ const turnoSchema = new Schema({
     estado: { type: String, enum: ['disponible', 'ocupado'], default: 'disponible' },
     eventoGoogleId: { type: String },
     duracion: { type: Number, default: 30 },
-    precio_base: {type: Number, default: 5000}
+    precio_base: { type: Number, default: 5000 },
+    precioPagado: {
+        type: Number,
+        default: 0
+    }
 });
 
 module.exports = mongoose.model('Turno', turnoSchema);
