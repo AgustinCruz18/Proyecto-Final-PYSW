@@ -1,42 +1,73 @@
 <div class="dashboard-card">
-  <h2>Registrar Secretaria</h2>
-  <form (ngSubmit)="registrar()" #form="ngForm" class="form-section">
-      <div class="form-row">
-        <input [(ngModel)]="nombre" name="nombre" required placeholder="Nombre" />
-        <input [(ngModel)]="email" name="email" required type="email" placeholder="Email" />
-        <input [(ngModel)]="password" name="password" required type="password" placeholder="Contraseña" />
-        <button type="submit" [disabled]="form.invalid">Registrar</button>
-      </div>
-  </form>
-  <p *ngIf="mensaje">{{ mensaje }}</p>
+    <h2>Registrar Secretaria</h2>
+    <form (ngSubmit)="registrar()" #form="ngForm" class="form-section" novalidate>
+        <div class="row g-3 align-items-end">
 
-  <hr>
-  <h4>Registrar nueva especialidad</h4>
-  <form (ngSubmit)="crearEspecialidad()" #formEsp="ngForm" class="form-section">
-      <div class="form-row">
-        <input [(ngModel)]="especialidadNombre" name="nombreEspecialidad" required placeholder="Nombre de especialidad" />
-        <button type="submit" [disabled]="formEsp.invalid">Registrar especialidad</button>
-      </div>
-      <p class="text-success mt-2" *ngIf="mensajeEspecialidad">{{ mensajeEspecialidad }}</p>
-  </form>
+            <div class="col-md-4">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" id="nombre" class="form-control" [(ngModel)]="nombre" name="nombre" required
+                    #nombreRef="ngModel" [class.is-invalid]="nombreRef.invalid && nombreRef.touched"
+                    [class.is-valid]="nombreRef.valid && nombreRef.touched" />
+                <div class="invalid-feedback" *ngIf="nombreRef.invalid && nombreRef.touched">
+                    El nombre es obligatorio.
+                </div>
+            </div>
 
-  <div class="table-responsive">
-      <h5>Especialidades registradas</h5>
-      <table>
-          <thead>
-              <tr>
-                  <th>Nombre</th>
-                  <th>Acción</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr *ngFor="let esp of especialidades">
-                  <td>{{ esp.nombre }}</td>
-                  <td>
-                      <button class="btn-eliminar" (click)="eliminarEspecialidad(esp._id)">Eliminar</button>
-                  </td>
-              </tr>
-          </tbody>
-      </table>
-  </div>
+            <div class="col-md-4">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" class="form-control" [(ngModel)]="email" name="email" required email
+                    #emailRef="ngModel" [class.is-invalid]="emailRef.invalid && emailRef.touched"
+                    [class.is-valid]="emailRef.valid && emailRef.touched" />
+                <div class="invalid-feedback" *ngIf="emailRef.invalid && emailRef.touched">
+                    Debe ingresar un email válido.
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" id="password" class="form-control" [(ngModel)]="password" name="password"
+                    required minlength="5" #passRef="ngModel" [class.is-invalid]="passRef.invalid && passRef.touched"
+                    [class.is-valid]="passRef.valid && passRef.touched" />
+                <div class="invalid-feedback" *ngIf="passRef.invalid && passRef.touched">
+                    Debe tener al menos 5 caracteres.
+                </div>
+            </div>
+
+        </div>
+
+        <button class="btn btn-primary mt-3" type="submit" [disabled]="form.invalid">Registrar</button>
+    </form>
+    
+    <p *ngIf="mensaje">{{ mensaje }}</p>
+
+    <hr>
+    <h4>Registrar nueva especialidad</h4>
+    <form (ngSubmit)="crearEspecialidad()" #formEsp="ngForm" class="form-section">
+        <div class="form-row">
+            <input [(ngModel)]="especialidadNombre" name="nombreEspecialidad" required
+                placeholder="Nombre de especialidad" />
+            <button type="submit" [disabled]="formEsp.invalid">Registrar especialidad</button>
+        </div>
+        <p class="text-success mt-2" *ngIf="mensajeEspecialidad">{{ mensajeEspecialidad }}</p>
+    </form>
+
+    <div class="table-responsive">
+        <h5>Especialidades registradas</h5>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let esp of especialidades">
+                    <td>{{ esp.nombre }}</td>
+                    <td>
+                        <button class="btn-eliminar" (click)="eliminarEspecialidad(esp._id)">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

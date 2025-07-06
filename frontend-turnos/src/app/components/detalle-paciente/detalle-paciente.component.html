@@ -34,23 +34,124 @@
       </div>
     </div>
   </div>
+</div>--
+<div class="container mt-4">
+  <div class="row">
+
+    <!-- Sección Turnos (que ahora ocupará más espacio) --
+    <div class="col-md-8">
+      <div class="card p-4 shadow-sm">
+        <h5>Turnos</h5>
+
+        <div *ngIf="turnos.length > 0; else sinTurnos">
+          <div *ngFor="let turno of turnos" class="border rounded p-3 mb-3">
+            <p><strong>Especialidad:</strong> {{ turno.especialidad?.nombre }}</p>
+            <p><strong>Médico:</strong> {{ turno.medico?.nombre }} {{ turno.medico?.apellido }}</p>
+            <p><strong>Fecha:</strong> {{ turno.fecha | date: 'fullDate' }}</p>
+            <p><strong>Hora:</strong> {{ turno.hora }}</p>
+            <p><strong>Estado:</strong>
+              <span [ngClass]="{
+        'text-success': turno.estado === 'confirmado',
+        'text-warning': turno.estado === 'pendiente',
+        'text-danger': turno.estado === 'cancelado'
+      }">{{ turno.estado | titlecase }}</span>
+            </p>
+          </div>
+        </div>
+
+        <ng-template #sinTurnos>
+          <p class="text-muted">Aún no tenés turnos registrados.</p>
+        </ng-template>
+
+      </div>
+    </div>-->
+
+    <!---
+    <div class="col-md-8">
+      <div class="card p-4 shadow-sm">
+        <h5>Turnos</h5>
+
+        <!-- Contenedor con scroll si hay muchos turnos --
+        <div style="max-height: 450px; overflow-y: auto;">
+          <div class="scroll-turnos">
+            <div *ngIf="turnos.length > 0; else sinTurnos">
+              <div *ngFor="let turno of turnos" class="border rounded p-3 mb-3">
+                <p><strong>Especialidad:</strong> {{ turno.especialidad?.nombre }}</p>
+                <p><strong>Médico:</strong> {{ turno.medico?.nombre }} {{ turno.medico?.apellido }}</p>
+                <p><strong>Fecha:</strong> {{ turno.fecha | date: 'fullDate' }}</p>
+                <p><strong>Hora:</strong> {{ turno.hora }}</p>
+                <p><strong>Estado:</strong>
+                  <span [ngClass]="{
+              'text-success': turno.estado === 'ocupado',
+              'text-muted': turno.estado === 'disponible'
+            }">{{ turno.estado | titlecase }}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #sinTurnos>
+          <p class="text-muted">Aún no tenés turnos registrados.</p>
+        </ng-template>
+      </div>
+    </div>
+
+
+    <!-- Sección Datos Personales (ahora más angosta) --
+    <div class="col-md-4">
+      <div class="card p-4 shadow-sm ">
+        <h4>Datos Personales</h4>
+        <p><strong>Nombre completo:</strong> {{ ficha?.nombreCompleto }}</p>
+        <p><strong>DNI:</strong> {{ ficha?.dni }}</p>
+        <p><strong>Edad:</strong> {{ ficha?.edad }}</p>
+        <p><strong>Género:</strong> {{ ficha?.genero }}</p>
+        <p><strong>Fecha de nacimiento:</strong> {{ ficha?.fechaNacimiento | date:'dd/MM/yyyy' }}</p>
+        <p><strong>Dirección:</strong> {{ ficha?.direccion }}</p>
+        <p><strong>Teléfono:</strong> {{ ficha?.telefono }}</p>
+
+        <h5 class="mt-4">Obras Sociales</h5>
+        <ul>
+          <li *ngFor="let os of ficha?.obrasSociales">
+            {{ os.nombre }} <span *ngIf="os.numeroSocio">- N° Socio: {{ os.numeroSocio }}</span>
+          </li>
+        </ul>
+
+        <button class="btn btn-primary mt-3" (click)="irAModificar()">
+          Modificar datos
+        </button>
+      </div>
+    </div>--
+
+  </div>
 </div>-->
 <div class="container mt-4">
   <div class="row">
 
-    <!-- Sección Turnos (que ahora ocupará más espacio) -->
+    <!-- Sección Turnos -->
     <div class="col-md-8">
       <div class="card p-4 shadow-sm">
-        <h5>Turnos</h5>
-        <p class="text-muted">Aquí se mostrarán tus turnos.</p>
-        <!-- Espacio preparado para agregar turnos más adelante -->
+        <h5>Mis Turnos</h5>
+        <div style="max-height: 460px; overflow-y: auto;">
+          <div *ngIf="turnos.length > 0; else sinTurnos">
+            <div *ngFor="let turno of turnos" class="border rounded p-3 mb-3">
+              <p><strong>Especialidad:</strong> {{ turno.especialidad?.nombre }}</p>
+              <p><strong>Médico:</strong> {{ turno.medico?.nombre }} {{ turno.medico?.apellido }}</p>
+              <p><strong>Fecha:</strong> {{ turno.fecha | date: 'fullDate' }}</p>
+              <p><strong>Hora:</strong> {{ turno.hora }}</p>
+            </div>
+          </div>
+          <ng-template #sinTurnos>
+            <p class="text-muted">Aún no tenés turnos registrados.</p>
+          </ng-template>
+        </div>
       </div>
     </div>
 
-    <!-- Sección Datos Personales (ahora más angosta) -->
+    <!-- Sección Datos Personales -->
     <div class="col-md-4">
       <div class="card p-4 shadow-sm mb-4">
-        <h4>Datos Personales</h4>
+        <h5>Datos Personales</h5>
         <p><strong>Nombre completo:</strong> {{ ficha?.nombreCompleto }}</p>
         <p><strong>DNI:</strong> {{ ficha?.dni }}</p>
         <p><strong>Edad:</strong> {{ ficha?.edad }}</p>

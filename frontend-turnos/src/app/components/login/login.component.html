@@ -15,13 +15,32 @@
                 <div class="mb-3">
                     <label for="email" class="form-label">Correo</label>
                     <input id="email" type="email" class="form-control" [(ngModel)]="email" name="email" required
-                        autocomplete="email" />
+                        autocomplete="email" 
+                        #emailInput="ngModel" email
+                        [ngClass]="{
+                            'is-invalid': emailInput.invalid && emailInput.touched,
+                            'is-valid': emailInput.valid && emailInput.touched
+                        }"
+                    />
+                    <div class="text-danger" *ngIf="emailInput.invalid && emailInput.touched">
+                        Ingresá un correo válido.
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Contraseña</label>
                     <input id="password" type="password" class="form-control" [(ngModel)]="password" name="password"
-                        required autocomplete="current-password" />
+                        required autocomplete="current-password" 
+                        minlength="5"
+                        #passwordInput="ngModel"
+                        [ngClass]="{
+                            'is-invalid': passwordInput.invalid && passwordInput.touched,
+                            'is-valid': passwordInput.valid && passwordInput.touched
+                        }"
+                    />
+                    <div class="text-danger" *ngIf="passwordInput.invalid && passwordInput.touched">
+                        La contraseña debe tener al menos 5 caracteres.
+                    </div>
                 </div>
 
                 <button class="btn btn-primary w-100" type="submit" [disabled]="loginForm.invalid">

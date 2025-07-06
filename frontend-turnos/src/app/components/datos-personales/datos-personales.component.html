@@ -26,22 +26,45 @@
 <!-- Formulario de datos personales accesible -->
 <div class="container mt-4">
     <h4>Datos personales</h4>
-    <form (ngSubmit)="guardar()" class="row g-3">
+    <form (ngSubmit)="guardar()" #formularioDatos="ngForm" class="row g-3">
 
         <div class="col-md-6">
             <label for="nombreCompleto">Nombre completo</label>
             <input id="nombreCompleto" class="form-control" [(ngModel)]="ficha.nombreCompleto" name="nombreCompleto"
-                required autocomplete="name" />
+                required autocomplete="name" #nombreCompletoInput="ngModel" #nombreInput="ngModel" [ngClass]="{
+                    'is-invalid': nombreInput.invalid && nombreInput.touched,
+                    'is-valid': nombreInput.valid && nombreInput.touched
+                }" />
+            <div class="text-danger" *ngIf="nombreInput.invalid && nombreInput.touched">
+                El nombre es obligatorio.
+            </div>
         </div>
         <div class="col-md-6">
             <label for="dni">DNI</label>
-            <input id="dni" class="form-control" [(ngModel)]="ficha.dni" name="dni" required />
+            <input id="dni" class="form-control" [(ngModel)]="ficha.dni" name="dni" required minlength="8" maxlength="8"
+                pattern="^[0-9]{8}$" #dniInput="ngModel" [ngClass]="{
+                'is-invalid': dniInput.invalid && dniInput.touched,
+                'is-valid': dniInput.valid && dniInput.touched
+                }" />
+            <div class="invalid-feedback" *ngIf="dniInput.errors?.['required']">
+                El DNI es obligatorio.
+            </div>
+            <div class="invalid-feedback" *ngIf="dniInput.errors?.['minlength'] || dniInput.errors?.['maxlength']">
+                El DNI debe tener exactamente 8 números.
+            </div>
+            <div class="invalid-feedback" *ngIf="dniInput.errors?.['pattern']">
+                El DNI solo puede contener números.
+            </div>
         </div>
 
         <div class="col-md-3">
             <label for="edad">Edad</label>
             <input id="edad" class="form-control" type="number" [(ngModel)]="ficha.edad" name="edad" required
-                autocomplete="bday-year" />
+                autocomplete="bday-year" min="0" #edadInput="ngModel" [ngClass]="{
+                    'is-invalid': edadInput.invalid && edadInput.touched,
+                    'is-valid': edadInput.valid && edadInput.touched
+                }" />
+            <div class="invalid-feedback">Ingresá una edad válida.</div>
         </div>
 
         <div class="col-md-3">
@@ -56,7 +79,17 @@
         <div class="col-md-6">
             <label for="fechaNacimiento">Fecha de nacimiento</label>
             <input id="fechaNacimiento" type="date" class="form-control" [(ngModel)]="ficha.fechaNacimiento"
-                name="fechaNacimiento" autocomplete="bday" />
+                name="fechaNacimiento" autocomplete="bday" 
+                required
+                #fechaNacimientoInput="ngModel"
+                [ngClass]="{
+                    'is-invalid': (fechaInvalida || fechaNacimientoInput.invalid) && fechaNacimientoInput.touched,
+                    'is-valid': fechaNacimientoInput.valid && !fechaInvalida && fechaNacimientoInput.touched
+                }"
+            />
+            <div class="invalid-feedback" *ngIf="fechaInvalida">
+                La fecha debe ser menor al año actual.
+            </div>
         </div>
 
         <div class="col-md-6 mt-3">
@@ -127,7 +160,7 @@
         </div>
 
         <div class="col-12">
-            <button class="btn btn-success mt-4" type="submit">
+            <button class="btn btn-success mt-4" type="submit" [disabled]="formularioDatos.invalid">
                 {{ esNuevaFicha ? 'Guardar' : 'Actualizar' }}
             </button>
         </div>

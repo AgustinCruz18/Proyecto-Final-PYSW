@@ -9,6 +9,8 @@ import { MedicoService } from '../../services/medico.service';
 import { HorarioService } from '../../services/horario.service';
 import { CalendarIframeComponent } from '../calendar-iframe/calendar-iframe.component';
 import { TurnoService } from '../../services/turno.service';
+import { ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard-secretaria',
@@ -39,6 +41,7 @@ export class DashboardSecretariaComponent implements OnInit {
   turnosFiltrados: any[] = [];
   estadoFiltro: string = 'todos';
 
+  @ViewChild('formHorario') formHorarioRef!: NgForm;
 
   constructor(
     private http: HttpClient,
@@ -120,14 +123,37 @@ export class DashboardSecretariaComponent implements OnInit {
     const { medico, fecha, horaInicio, horaFin } = this.horario;
     if (!medico || !fecha || !horaInicio || !horaFin) return;
 
+    // Validación de fecha futura o actual
+    const hoy = new Date();
+    const fechaIngresada = new Date(fecha);
+
+    // Eliminar la hora para comparar solo fechas
+    hoy.setHours(0, 0, 0, 0);
+    fechaIngresada.setHours(0, 0, 0, 0);
+
+    if (fechaIngresada < hoy) {
+      this.mensajeHorario = 'La fecha no puede ser anterior a hoy.';
+      return;
+    }
+
+    // Validación de rango horario
+    if (horaFin <= horaInicio) {
+      this.mensajeHorario = 'La hora de fin debe ser posterior a la hora de inicio.';
+      return;
+    }
+
     this.horarioService.crearHorario(medico, fecha, horaInicio, horaFin).subscribe({
       next: (data: any) => {
-        this.mensajeHorario = 'Horario creado correctamente.';
         this.horario = { medico: '', fecha: '', horaInicio: '', horaFin: '' };
+
         if (data.turnos) {
 
           this.turnos = [...this.turnos, ...data.turnos];
         }
+        this.formHorarioRef.resetForm(); // primero limpiás el form
+        this.mensajeHorario = 'Horario creado correctamente.';
+        setTimeout(() => this.mensajeHorario = '', 3000);
+
       },
       error: () => {
         this.mensajeHorario = 'Hubo un error al crear el horario.';
@@ -151,6 +177,10 @@ export class DashboardSecretariaComponent implements OnInit {
       setTimeout(() => alertDiv.remove(), 150);
     }, 3000);
   }
+  limpiarMensaje() {
+    this.mensajeHorario = '';
+  }
+
   cargarTurnos() {
     this.turnoService.getTodos().subscribe({
       next: (data) => {

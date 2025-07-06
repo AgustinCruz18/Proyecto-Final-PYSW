@@ -25,6 +25,8 @@ export class DatosPersonalesComponent implements OnInit {
   numeroSocio1 = '';
   numeroSocio2 = '';
   mostrarSegundaObra = false;
+  fechaInvalida: boolean = false;
+
 
   obrasSocialesBase = ['OSDE', 'Swiss Medical', 'IOSFA', 'Particular'];
   mensajeModal = '';
@@ -106,6 +108,17 @@ export class DatosPersonalesComponent implements OnInit {
   }
 
   guardar(): void {
+    const anioActual = new Date().getFullYear();
+  const fechaNacimiento = new Date(this.ficha.fechaNacimiento);
+
+  if (fechaNacimiento.getFullYear() >= anioActual) {
+    this.fechaInvalida = true;
+    this.mensajeModal = 'La fecha de nacimiento debe ser anterior al año actual.';
+    this.mostrarModalConFocoSeguro();
+    return;
+  } else {
+    this.fechaInvalida = false;
+  }
     const fichaData = {
       userId: this.userId, // Usamos this.userId que ya viene de la ruta
       nombreCompleto: this.ficha.nombreCompleto,

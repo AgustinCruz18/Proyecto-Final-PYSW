@@ -208,4 +208,22 @@ exports.actualizar = async (req, res) => {
         console.error('❌ Error al actualizar turno:', err);
         res.status(500).json({ message: 'Error al actualizar turno' });
     }
+
+};
+
+// Obtener los turnos de un paciente específico
+exports.obtenerPorPaciente = async (req, res) => {
+    const { idPaciente } = req.params;
+
+    try {
+        const turnos = await Turno.find({ paciente: idPaciente })
+            .populate('medico', 'nombre apellido')
+            .populate('especialidad', 'nombre')
+            .sort({ fecha: -1, hora: 1 }); // Ordena por fecha descendente y hora ascendente
+
+        res.json(turnos);
+    } catch (error) {
+        console.error('❌ Error al obtener turnos del paciente:', error);
+        res.status(500).json({ message: 'Error al obtener los turnos del paciente' });
+    }
 };

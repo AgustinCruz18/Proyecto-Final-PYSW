@@ -12,6 +12,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class DetallePacienteComponent {
   ficha: any = {};
   userId = '';
+  turnos: any[] = [];
+  idUsuario: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -29,9 +31,31 @@ export class DetallePacienteComponent {
         console.error('Error al cargar la ficha:', err);
       }
     });
+    this.cargarTurnosPaciente();
   }
 
   irAModificar(): void {
     this.router.navigate([`/paciente/datos-personales/${this.userId}`]);
+  }
+
+  /*cargarTurnosPaciente() {
+    this.http.get<any[]>(`http://localhost:5000/api/turnos/paciente/${this.idUsuario}`).subscribe({
+      next: (data) => {
+        this.turnos = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar los turnos del paciente', err);
+      }
+    });
+  }*/
+  cargarTurnosPaciente() {
+    this.http.get<any[]>(`http://localhost:5000/api/turnos/paciente/${this.userId}`).subscribe({
+      next: (data) => {
+        this.turnos = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar los turnos del paciente', err);
+      }
+    });
   }
 } 
