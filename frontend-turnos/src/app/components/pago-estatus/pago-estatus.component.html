@@ -1,0 +1,7 @@
+<div class="container text-center mt-5">
+    <h2 [ngClass]="{
+    'text-success': estado === 'exitoso',
+    'text-warning': estado === 'pendiente',
+    'text-danger': estado === 'fallido'
+  }">{{ mensaje }}</h2>
+</div>

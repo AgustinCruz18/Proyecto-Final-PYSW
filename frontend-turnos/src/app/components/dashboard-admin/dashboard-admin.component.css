@@ -1,0 +1,219 @@
+/* Fondo general */
+:host {
+  display: block;
+  background: var(--color-fondo);
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+/* Títulos */
+h1, h2 {
+  color: var(--color-principal);
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  font-weight: 800;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.01em;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-top: 2rem;
+}
+
+/* Formularios */
+input[type="text"], input[type="email"], input[type="password"] {
+  border: 1.5px solid var(--color-borde);
+  border-radius: 8px;
+  padding: 0.7em 1em;
+  font-size: 1rem;
+  font-family: inherit;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  background: #fff;
+  transition: border 0.2s;
+  width: 100%;
+  max-width: 320px;
+}
+input:focus {
+  border-color: var(--color-principal);
+  outline: none;
+}
+
+button, .btn {
+  background: var(--color-principal);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  padding: 0.6rem 1.7rem;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  box-shadow: 0 2px 8px rgba(0, 102, 166, 0.07);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  outline: none;
+  margin-bottom: 0.5rem;
+}
+button:disabled, .btn:disabled {
+  background: var(--color-borde);
+  color: #aaa;
+  cursor: not-allowed;
+}
+button:hover:not(:disabled), .btn:hover:not(:disabled) {
+  background: var(--color-secundario);
+  color: #fff;
+}
+
+/* Sección de formularios */
+.form-section {
+  background: var(--color-fondo-sec);
+  border-radius: 18px;
+  box-shadow: 0 2px 16px rgba(0, 102, 166, 0.05);
+  padding: 2rem 2rem 1.5rem 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Tablas */
+.table-responsive {
+  overflow-x: auto;
+  margin-top: 2rem;
+  border-radius: 16px;
+  background: transparent;
+}
+
+table {
+  width: 100%;
+  background: var(--color-fondo-sec);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 102, 166, 0.04);
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 0;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 1.1rem 1.3rem;
+  text-align: left;
+}
+
+th {
+  background: var(--color-principal);
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+}
+
+td {
+  border: none;
+  color: var(--color-texto);
+  font-size: 1.05rem;
+  vertical-align: middle;
+  background: #fff;
+  transition: background 0.2s;
+}
+
+tr:nth-child(even) td {
+  background: #f3f7fa;
+}
+
+tr:hover td {
+  background: #eaf6fb;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Botón eliminar */
+.btn-eliminar, .btn-danger {
+  background: var(--color-alerta);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  padding: 0.5rem 1.3rem;
+  font-size: 1rem;
+  margin: 0.2rem 0;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-eliminar:hover, .btn-danger:hover {
+  background: #c0392b;
+  color: #fff;
+}
+
+/* Contenedor centralizado y responsivo */
+.dashboard-card {
+  background: var(--color-fondo-sec);
+  border-radius: 22px;
+  box-shadow: 0 4px 32px rgba(0,102,166,0.08);
+  padding: 2.5rem 2.5rem 2rem 2.5rem;
+  margin: 2rem auto;
+  max-width: 900px;
+  min-width: 320px;
+  width: 95%;
+  box-sizing: border-box;
+}
+
+/* Formularios y tablas dentro del contenedor */
+.form-section,
+.table-responsive {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Responsive: menos padding en mobile */
+@media (max-width: 600px) {
+  .dashboard-card,
+  .form-section,
+  .table-responsive {
+    padding: 1rem 0.5rem;
+    max-width: 99vw;
+  }
+}
+
+@media (max-width: 900px) {
+  .form-section, table {
+    padding: 1rem 0.5rem;
+    font-size: 0.97rem;
+  }
+  th, td {
+    padding: 0.7rem 0.5rem;
+  }
+  h2 {
+    font-size: 1.2rem;
+  }
+  button, .btn {
+    padding: 0.5rem 1.1rem;
+    font-size: 0.97rem;
+  }
+}
+
+/* Formularios alineados en fila y responsivos */
+.form-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+
+.form-row input,
+.form-row button {
+  margin-right: 0;
+  margin-bottom: 0;
+  flex: 1 1 0;
+  min-width: 160px;
+}
+
+@media (max-width: 700px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0.7rem;
+    align-items: stretch;
+  }
+}

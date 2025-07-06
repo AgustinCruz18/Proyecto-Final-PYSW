@@ -89,8 +89,8 @@ export class DashboardPacienteComponent implements OnInit {
    */
   obtenerDescuento(obraSocial: string): number {
     switch (obraSocial) {
-      case 'OSDE': return 0.3;
-      case 'Swiss Medical': return 0.25;
+      case 'OSDE': return 1;
+      case 'Swiss Medical': return 0.998;
       case 'IOSFA': return 0.2;
       case 'Otra': return 0.1;
       case 'Particular': return 0; // Sin descuento para "Particular"
@@ -178,7 +178,9 @@ export class DashboardPacienteComponent implements OnInit {
     const idMedico = this.medicoSeleccionado;
     const idEspecialidad = this.especialidadSeleccionada;
     const obraSocial = obraSocialNombre || 'Particular'; // Asegura un valor por defecto
-    const email = this.ficha?.email || 'test@email.com'; // Email del pagador, con fallback
+    //const email = this.ficha?.email || 'test@email.com'; // Email del pagador, con fallback
+    const email = this.ficha?.email || 'paciente@email.com';
+    // ✅ Email del usuario comprador de prueba
 
     console.log("Enviando al backend:", {
       idTurno, idMedico, idEspecialidad, obra_social: obraSocial, payer_email: email, precio: this.precioConDescuento
@@ -201,10 +203,10 @@ export class DashboardPacienteComponent implements OnInit {
       next: (res) => {
         if (res.init_point) {
           localStorage.setItem('turnoAPagar', JSON.stringify(this.turnoParaPagar));
-          window.location.href = res.init_point; // Redirige al usuario al portal de pago
-          this.mostrarFormularioReserva = false; // Oculta el formulario después de la redirección
+          window.location.href = res.init_point;
         } else {
-          this.mensaje = 'No se pudo generar el link de pago.';
+          // Si no hay link de pago porque es 100% cubierto
+          this.reservarTurnoDirecto();
         }
       },
       error: (err) => {
@@ -213,6 +215,23 @@ export class DashboardPacienteComponent implements OnInit {
       }
     });
   }
+  reservarTurnoDirecto() {
+    this.http.post('http://localhost:5000/api/turnos/reservar', {
+      turnoId: this.turnoParaPagar._id,
+      pacienteId: this.ficha.userId, // <- usa userId aquí si es necesario
+      obraSocial: this.obraSocialSeleccionada
+    }).subscribe({
+      next: () => {
+        this.mensaje = 'Turno reservado automáticamente (sin pago).';
+        localStorage.removeItem('turnoAPagar');
+        this.mostrarFormularioReserva = false;
+      },
+      error: () => {
+        this.mensaje = 'Error al reservar turno automáticamente.';
+      }
+    });
+  }
+
 
   /**
    * Envía la pregunta del paciente al asistente virtual (IA).
@@ -224,7 +243,7 @@ export class DashboardPacienteComponent implements OnInit {
     this.mensajes.push({ origen: 'paciente', texto: mensajeUsuario }); // Agrega el mensaje del usuario
     this.pregunta = ''; // Limpia el input
 
-    this.http.post<any>('http://localhost:5000/api/ia', { pregunta: mensajeUsuario }).subscribe({
+    this.http.post<any>('https://backend-turnos-1.onrender.com/api/ia', { pregunta: mensajeUsuario }).subscribe({
       next: res => {
         this.mensajes.push({ origen: 'ia', texto: res.respuesta }); // Agrega la respuesta de la IA
       },

@@ -148,7 +148,7 @@ export class DatosPersonalesComponent implements OnInit {
       }
     });
   }
-  
+
   mostrarModalConFocoSeguro(redirigir: boolean = false): void {
     const modalElement = document.getElementById('confirmModal');
     const submitBtn = document.querySelector('button[type="submit"]') as HTMLElement;

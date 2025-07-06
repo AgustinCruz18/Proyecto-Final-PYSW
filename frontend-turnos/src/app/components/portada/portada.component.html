@@ -1,13 +1,38 @@
-<header
-    style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #333; color: white;">
-    <h1>Turnos Médicos</h1>
-    <button (click)="irAlLogin()"
-        style="padding: 0.5rem 1rem; background: #007bff; border: none; color: white; border-radius: 5px;">
-        Iniciar Sesión
-    </button>
+<header class="navbar">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+    <a class="navbar-brand">Turnos Médicos</a>
+    <div>
+      <button class="btn btn-primary" (click)="irAlLogin()">Iniciar Sesión</button>
+    </div>
+  </div>
 </header>
 
-<main style="text-align: center; margin-top: 5rem;">
-    <h2>Bienvenido a la plataforma de turnos</h2>
-    <p>Accedé para gestionar tus turnos como paciente, secretaria o administrador.</p>
+<main class="portada-hero">
+  <section class="portada-card portada-card-grande">
+    <div class="portada-info">
+      <h1 class="portada-title">Gestioná tu salud de manera simple y segura</h1>
+      <p class="portada-desc">
+        Bienvenido a la plataforma de turnos online.<br>
+        Reservá, consultá y gestioná tus turnos médicos desde cualquier lugar.<br>
+        <span class="fw-bold">Pacientes, secretarias y administradores</span> pueden acceder a todas las funcionalidades.
+      </p>
+      <div class="portada-cta">
+        <button class="btn btn-primary" (click)="irAlLogin()">Iniciar Sesión</button>
+      </div>
+    
+    </div>
+    <div class="portada-img">
+      <img src="/portada.jpg" alt="Ilustración médica" class="img-fluid rounded-4 shadow" style="max-width: 420px;">
+    </div>
+  </section>
 </main>
+
+<footer class="portada-footer">
+  <div class="footer-content">
+    <span>&copy; 2025 - Clínica Local · Todos los derechos reservados</span>
+    <span class="footer-links">
+      <a href="#">Política de Privacidad</a> ·
+      <a href="#">Términos y Condiciones</a>
+    </span>
+  </div>
+</footer>

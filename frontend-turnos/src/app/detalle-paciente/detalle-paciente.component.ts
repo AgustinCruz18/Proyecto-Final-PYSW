@@ -17,7 +17,7 @@ export class DetallePacienteComponent {
     private route: ActivatedRoute,
     private http: HttpClient,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.userId = this.route.snapshot.paramMap.get('id') || '';
@@ -27,7 +27,7 @@ export class DetallePacienteComponent {
       },
       error: (err) => {
         console.error('Error al cargar la ficha:', err);
-      } 
+      }
     });
   }
 

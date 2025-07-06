@@ -1,1 +1,382 @@
-/* You can add global styles to this file, and also import other style files */
+/* Paleta profesional DrApp-inspired */
+:root {
+  --color-principal: #0066a6;
+  --color-secundario: #009ee3;
+  --color-fondo: #f8fafc;
+  --color-fondo-sec: #ffffff;
+  --color-texto: #1a2a36;
+  --color-acento: #00b48a;
+  --color-alerta: #ff6f61;
+  --color-borde: #e3e8ee;
+}
+
+body {
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: 'Segoe UI', 'Montserrat', Arial, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Header y navbar */
+header, .navbar {
+  background: var(--color-fondo-sec);
+  color: var(--color-principal);
+  box-shadow: 0 2px 8px rgba(0, 102, 166, 0.04);
+  border-bottom: 1px solid var(--color-borde);
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  z-index: 100;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.7rem;
+  color: var(--color-principal) !important;
+  letter-spacing: 0.5px;
+  transition: color 0.3s;
+}
+.navbar-brand:hover {
+  color: var(--color-secundario) !important;
+}
+
+.navbar-nav .nav-link,
+.nav-link {
+  color: var(--color-principal) !important;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+  background: transparent;
+}
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link:hover {
+  background: var(--color-secundario);
+  color: #fff !important;
+}
+
+/* Dropdown personalizado */
+.dropdown-menu {
+  min-width: 220px;
+  padding: 0.5rem 0;
+  background: #fff;
+  border-radius: 12px;
+  margin-top: 0.7rem;
+  border: none;
+  box-shadow: 0 8px 32px rgba(0,102,166,0.10);
+  z-index: 2000;
+  font-family: 'Segoe UI', 'Montserrat', Arial, sans-serif;
+}
+
+.dropdown-item,
+.dropdown-menu-button {
+  color: var(--color-texto);
+  font-weight: 500;
+  padding: 0.7rem 1.2rem;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.dropdown-item:hover,
+.dropdown-menu-button:hover {
+  background: var(--color-secundario);
+  color: #fff !important;
+}
+
+.dropdown-item-text {
+  font-weight: bold;
+  color: var(--color-principal);
+  padding: 0.7rem 1.2rem 0.3rem 1.2rem;
+  font-size: 1.08rem;
+}
+
+.dropdown-divider {
+  border-top: 1px solid var(--color-borde);
+  margin: 0.5rem 0;
+}
+
+.dropdown-item.text-danger,
+.nav-link.text-danger {
+  background: none;
+  color: var(--color-alerta) !important;
+  font-weight: 600;
+  text-align: left;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+.dropdown-item.text-danger:hover,
+.nav-link.text-danger:hover {
+  background: #ffeaea;
+  color: #c0392b !important;
+}
+
+/* Navegación */
+.nav-link, .navbar-nav .nav-link {
+  color: var(--color-texto) !important;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-link:hover, .navbar-nav .nav-link.active {
+  background: var(--color-secundario);
+  color: #fff !important;
+}
+
+/* Botones */
+.btn, .btn-primary, .btn-accent {
+  background: var(--color-principal);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  padding: 0.6rem 1.7rem;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  box-shadow: 0 2px 8px rgba(0, 102, 166, 0.07);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.btn-accent {
+  background: var(--color-acento);
+}
+.btn:hover, .btn-primary:hover, .btn-accent:hover {
+  background: var(--color-secundario);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(0, 158, 227, 0.10);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--color-principal);
+  border: 2px solid var(--color-principal);
+}
+.btn-outline:hover {
+  background: var(--color-principal);
+  color: #fff;
+}
+
+/* Títulos */
+h1, h2, h3 {
+  color: var(--color-principal);
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.7em;
+  line-height: 1.15;
+}
+
+/* Secciones destacadas */
+.section-destacada {
+  background: var(--color-fondo-sec);
+  border-radius: 18px;
+  padding: 2.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 16px rgba(0, 102, 166, 0.05);
+}
+
+/* Tablas */
+table {
+  background: var(--color-fondo-sec);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 102, 166, 0.04);
+  overflow: hidden;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+th {
+  background: var(--color-principal);
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  padding: 0.8em 1em;
+}
+td {
+  border: none;
+  color: var(--color-texto);
+  padding: 0.7em 1em;
+}
+tr {
+  border-bottom: 1px solid var(--color-borde);
+}
+tr:last-child {
+  border-bottom: none;
+}
+
+/* Alertas */
+.alerta, .alert {
+  background: var(--color-alerta);
+  color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(255, 111, 97, 0.08);
+}
+
+/* Links */
+a {
+  color: var(--color-principal);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+a:hover {
+  color: var(--color-secundario);
+  text-decoration: underline;
+}
+
+/* Etiquetas de estado */
+.estado-si {
+  background: var(--color-acento);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.2rem 0.8rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: inline-block;
+}
+.estado-no {
+  background: var(--color-alerta);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.2rem 0.8rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: inline-block;
+}
+
+/* Centrado flexible */
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mejoras responsive y mobile first */
+@media (max-width: 991.98px) {
+  .section-destacada {
+    padding: 1.2rem;
+  }
+  table {
+    font-size: 0.97rem;
+  }
+  h1, h2, h3 {
+    font-size: 1.2rem;
+  }
+  .navbar {
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+  }
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+  .btn, .btn-primary, .btn-accent {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.97rem;
+  }
+  .dropdown-menu {
+    min-width: 170px;
+    font-size: 0.97rem;
+  }
+}
+
+/* Mejoras para portada y tarjetas grandes */
+@media (max-width: 900px) {
+  .portada-card,
+  .portada-card-grande {
+    flex-direction: column;
+    align-items: center;
+    padding: 1.2rem 0.5rem;
+    gap: 1.2rem;
+    min-height: unset;
+    max-width: 98vw;
+  }
+  .portada-info {
+    width: 100%;
+    text-align: center;
+  }
+  .portada-title {
+    font-size: 1.5rem;
+  }
+  .portada-img img {
+    max-width: 220px;
+    width: 100%;
+    margin: 0 auto;
+    display: block;
+  }
+}
+
+/* Sombra sutil para cards, modals, etc */
+.card, .modal-content {
+  box-shadow: 0 4px 24px rgba(0, 102, 166, 0.08);
+  border-radius: 14px;
+}
+
+input, select, textarea {
+  border: 1.5px solid var(--color-borde);
+  border-radius: 7px;
+  padding: 0.6em 1em;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border 0.2s;
+  background: #fff;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--color-principal);
+  outline: none;
+}
+
+/* Scrollbar moderno */
+::-webkit-scrollbar {
+  width: 10px;
+  background: var(--color-fondo);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-borde);
+  border-radius: 6px;
+}
+
+/* Footer */
+.portada-footer {
+  background: var(--color-fondo-sec, #fff);
+  border-top: 1px solid var(--color-borde, #e3e8ee);
+  padding: 1.2rem 0;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--color-texto, #1a2a36);
+  margin-top: 2rem;
+}
+.footer-content {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+.footer-links a {
+  color: var(--color-principal, #0066a6);
+  text-decoration: none;
+  margin: 0 0.3rem;
+  font-weight: 500;
+}
+.footer-links a:hover {
+  text-decoration: underline;
+}
+@media (max-width: 600px) {
+  .footer-content {
+    font-size: 0.95rem;
+    padding: 0 0.5rem;
+  }
+}

@@ -7,10 +7,8 @@ import { DashboardPacienteComponent } from './components/dashboard-paciente/dash
 import { RegistroComponent } from './components/registro/registro.component';
 import { PortadaComponent } from './components/portada/portada.component';
 import { DatosPersonalesComponent } from './components/datos-personales/datos-personales.component';
-import { PagoExitosoComponent } from './components/pago-exitoso/pago-exitoso.component';
-import { PagoPendienteComponent } from './components/pago-pendiente/pago-pendiente.component';
-import { PagoFallidoComponent } from './components/pago-fallido/pago-fallido.component';
 import { DetallePacienteComponent } from './detalle-paciente/detalle-paciente.component';
+import { PagoEstatusComponent } from './components/pago-estatus/pago-estatus.component';
 
 
 export const routes: Routes = [
@@ -21,13 +19,12 @@ export const routes: Routes = [
     { path: 'admin', component: DashboardAdminComponent },
     { path: 'secretaria', component: DashboardSecretariaComponent },
     { path: 'paciente/:id', component: DashboardPacienteComponent },
-     { path: 'detalle-paciente/:id', component: DetallePacienteComponent },
+    { path: 'detalle-paciente/:id', component: DetallePacienteComponent },
     { path: 'datos-personales/:id', component: DatosPersonalesComponent },
     { path: 'secretaria', component: DashboardSecretariaComponent },
     { path: '**', redirectTo: 'portada' },
-    { path: 'pago/exitoso', component: PagoExitosoComponent },
-    { path: 'pago/pendiente', component: PagoPendienteComponent },
-    { path: 'pago/fallido', component: PagoFallidoComponent },
+    { path: 'pago/estatus', component: PagoEstatusComponent },
+
 ];
 
 @NgModule({
