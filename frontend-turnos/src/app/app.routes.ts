@@ -10,6 +10,7 @@ import { DatosPersonalesComponent } from './components/datos-personales/datos-pe
 import { DetallePacienteComponent } from './components/detalle-paciente/detalle-paciente.component';
 import { PagoEstatusComponent } from './components/pago-estatus/pago-estatus.component';
 import { AuthGuard } from './guards/auth.guard';
+import { DashboardGerenteComponent } from './components/dashboard-gerente/dashboard-gerente.component';
 
 export const routes: Routes = [
 
@@ -43,7 +44,7 @@ export const routes: Routes = [
     },
     {
         path: 'paciente/datos-personales/:id',
-        component:  DatosPersonalesComponent,
+        component: DatosPersonalesComponent,
         canActivate: [AuthGuard],
         data: { roles: ['paciente'] }
     },
@@ -55,12 +56,18 @@ export const routes: Routes = [
     },
     {
         path: 'pago/estatus',
-        component:  PagoEstatusComponent,
+        component: PagoEstatusComponent,
         canActivate: [AuthGuard],
         data: { roles: ['paciente'] }
     },
+    {
+        path: 'gerente',
+        component: DashboardGerenteComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['gerente'] }
+    },
     { path: '**', redirectTo: 'portada' },
-    
+
 
 ];
 

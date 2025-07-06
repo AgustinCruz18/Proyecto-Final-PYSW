@@ -12,4 +12,10 @@ export class UserService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.post(`${this.apiUrl}/crear-secretaria`, { nombre, email, password }, { headers });
   }
+
+  crearGerente(nombre: string, email: string, password: string) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post(`${this.apiUrl}/crear-gerente`, { nombre, email, password }, { headers });
+  }
 }

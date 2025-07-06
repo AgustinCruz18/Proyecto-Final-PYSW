@@ -41,6 +41,7 @@ export class LoginComponent {
 
             if (rol === 'administrador') this.router.navigate(['/admin']);
             else if (rol === 'secretaria') this.router.navigate(['/secretaria']);
+            else if (rol === 'gerente') this.router.navigate(['/gerente']);
             else if (rol === 'paciente' && id)
               this.router.navigate(['/paciente', id]);
             else this.router.navigate(['/portada']);

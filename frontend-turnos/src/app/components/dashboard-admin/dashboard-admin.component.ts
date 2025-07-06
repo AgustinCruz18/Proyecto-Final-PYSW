@@ -15,6 +15,7 @@ export class DashboardAdminComponent {
   email = '';
   password = '';
   mensaje = '';
+  mensajeGerente = '';
   especialidadNombre = '';
   especialidades: any[] = [];
   mensajeEspecialidad = '';
@@ -32,6 +33,13 @@ export class DashboardAdminComponent {
     this.userService.crearSecretaria(this.nombre, this.email, this.password).subscribe({
       next: () => this.mensaje = 'Secretaria registrada correctamente',
       error: err => this.mensaje = err.error.message || 'Error al registrar secretaria'
+    });
+  }
+
+  registrarGerente() {
+    this.userService.crearGerente(this.nombre, this.email, this.password).subscribe({
+      next: () => this.mensajeGerente = 'Gerente registrado correctamente',
+      error: err => this.mensajeGerente = err.error.message || 'Error al registrar gerente'
     });
   }
 

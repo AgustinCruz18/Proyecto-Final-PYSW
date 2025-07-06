@@ -1,4 +1,46 @@
 <div class="dashboard-card">
+    <h2>Registrar Gerente</h2>
+    <form (ngSubmit)="registrarGerente()" #formGte="ngForm" class="form-section" novalidate>
+        <div class="row g-3 align-items-end">
+
+            <div class="col-md-4">
+                <label for="nombreGte" class="form-label">Nombre</label>
+                <input type="text" id="nombreGte" class="form-control" [(ngModel)]="nombre" name="nombre" required
+                    #nombreGteRef="ngModel" [class.is-invalid]="nombreGteRef.invalid && nombreGteRef.touched"
+                    [class.is-valid]="nombreGteRef.valid && nombreGteRef.touched" />
+                <div class="invalid-feedback" *ngIf="nombreGteRef.invalid && nombreGteRef.touched">
+                    El nombre es obligatorio.
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label for="emailGte" class="form-label">Email</label>
+                <input type="email" id="emailGte" class="form-control" [(ngModel)]="email" name="email" required email
+                    #emailGteRef="ngModel" [class.is-invalid]="emailGteRef.invalid && emailGteRef.touched"
+                    [class.is-valid]="emailGteRef.valid && emailGteRef.touched" />
+                <div class="invalid-feedback" *ngIf="emailGteRef.invalid && emailGteRef.touched">
+                    Debe ingresar un email válido.
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label for="passwordGte" class="form-label">Contraseña</label>
+                <input type="password" id="passwordGte" class="form-control" [(ngModel)]="password" name="password"
+                    required minlength="5" #passGteRef="ngModel"
+                    [class.is-invalid]="passGteRef.invalid && passGteRef.touched"
+                    [class.is-valid]="passGteRef.valid && passGteRef.touched" />
+                <div class="invalid-feedback" *ngIf="passGteRef.invalid && passGteRef.touched">
+                    Debe tener al menos 5 caracteres.
+                </div>
+            </div>
+
+        </div>
+
+        <button class="btn btn-secondary mt-3" type="submit" [disabled]="formGte.invalid">Registrar</button>
+    </form>
+
+    <p *ngIf="mensajeGerente" class="text-success">{{ mensajeGerente }}</p>
+
     <h2>Registrar Secretaria</h2>
     <form (ngSubmit)="registrar()" #form="ngForm" class="form-section" novalidate>
         <div class="row g-3 align-items-end">
@@ -37,7 +79,7 @@
 
         <button class="btn btn-primary mt-3" type="submit" [disabled]="form.invalid">Registrar</button>
     </form>
-    
+
     <p *ngIf="mensaje">{{ mensaje }}</p>
 
     <hr>

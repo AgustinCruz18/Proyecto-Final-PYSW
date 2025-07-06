@@ -88,6 +88,25 @@ router.post('/crear-secretaria', verificarAdmin, async (req, res) => {
         res.status(500).json({ message: 'Error al registrar secretaria' });
     }
 });
+
+// Crear gerente (solo admin)
+router.post('/crear-gerente', verificarAdmin, async (req, res) => {
+    const { nombre, email, password } = req.body;
+    try {
+        const existe = await User.findOne({ email });
+        if (existe) return res.status(400).json({ message: 'El email ya está registrado' });
+
+        const hashed = await bcrypt.hash(password, 10);
+        const gerente = new User({ nombre, email, password: hashed, rol: 'gerente' });
+        await gerente.save();
+
+        res.status(201).json({ message: 'Gerente registrado correctamente' });
+    } catch (err) {
+        console.error('Error al crear gerente:', err);
+        res.status(500).json({ message: 'Error en el servidor' });
+    }
+});
+
 /*Ruta temporal para crear un administrador<
 router.post('/crear-admin', async (req, res) => {
     const { nombre, email, password } = req.body;
@@ -106,6 +125,7 @@ router.post('/crear-admin', async (req, res) => {
     }
 });
 */
+
 // Login con Google
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
