@@ -41,12 +41,11 @@ export class HeaderComponent {
   irADatosPersonales() {
     const id = this.user()?.id;
     if (id) {
-      this.router.navigate([`/detalle-paciente/${id}`]);
+      this.router.navigate([`/paciente/detalle-paciente/${id}`]);
     }
   }
 
   logout() {
     this.auth.logout();
-    this.router.navigate(['/login']);
   }
 }

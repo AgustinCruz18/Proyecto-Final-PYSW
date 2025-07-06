@@ -1,0 +1,76 @@
+<!--<div class="container mt-4">
+  <div class="row">
+     Datos del paciente --
+    <div class="col-md-8">
+      <div class="card p-4 shadow-sm mb-4">
+        <h4>Datos Personales</h4>
+        <p><strong>Nombre completo:</strong> {{ ficha?.nombreCompleto }}</p>
+        <p><strong>DNI:</strong> {{ ficha?.dni }}</p>
+        <p><strong>Edad:</strong> {{ ficha?.edad }}</p>
+        <p><strong>Género:</strong> {{ ficha?.genero }}</p>
+        <p><strong>Fecha de nacimiento:</strong> {{ ficha?.fechaNacimiento | date:'dd/MM/yyyy' }}</p>
+        <p><strong>Dirección:</strong> {{ ficha?.direccion }}</p>
+        <p><strong>Teléfono:</strong> {{ ficha?.telefono }}</p>
+
+        <h5 class="mt-4">Obras Sociales</h5>
+        <ul>
+          <li *ngFor="let os of ficha?.obrasSociales">
+            {{ os.nombre }} <span *ngIf="os.numeroSocio">- N° Socio: {{ os.numeroSocio }}</span>
+          </li>
+        </ul>
+
+        <button class="btn btn-primary mt-3" (click)="irAModificar()">
+          Modificar datos
+        </button>
+      </div>
+    </div>
+
+    Sección reservada para turnos --
+    <div class="col-md-4">
+      <div class="card p-4 shadow-sm">
+        <h5>Turnos</h5>
+        <p class="text-muted">Aquí se mostrarán los turnos del paciente.</p>
+        Espacio preparado para agregar turnos más adelante --
+      </div>
+    </div>
+  </div>
+</div>-->
+<div class="container mt-4">
+  <div class="row">
+
+    <!-- Sección Turnos (que ahora ocupará más espacio) -->
+    <div class="col-md-8">
+      <div class="card p-4 shadow-sm">
+        <h5>Turnos</h5>
+        <p class="text-muted">Aquí se mostrarán tus turnos.</p>
+        <!-- Espacio preparado para agregar turnos más adelante -->
+      </div>
+    </div>
+
+    <!-- Sección Datos Personales (ahora más angosta) -->
+    <div class="col-md-4">
+      <div class="card p-4 shadow-sm mb-4">
+        <h4>Datos Personales</h4>
+        <p><strong>Nombre completo:</strong> {{ ficha?.nombreCompleto }}</p>
+        <p><strong>DNI:</strong> {{ ficha?.dni }}</p>
+        <p><strong>Edad:</strong> {{ ficha?.edad }}</p>
+        <p><strong>Género:</strong> {{ ficha?.genero }}</p>
+        <p><strong>Fecha de nacimiento:</strong> {{ ficha?.fechaNacimiento | date:'dd/MM/yyyy' }}</p>
+        <p><strong>Dirección:</strong> {{ ficha?.direccion }}</p>
+        <p><strong>Teléfono:</strong> {{ ficha?.telefono }}</p>
+
+        <h5 class="mt-4">Obras Sociales</h5>
+        <ul>
+          <li *ngFor="let os of ficha?.obrasSociales">
+            {{ os.nombre }} <span *ngIf="os.numeroSocio">- N° Socio: {{ os.numeroSocio }}</span>
+          </li>
+        </ul>
+
+        <button class="btn btn-primary mt-3" (click)="irAModificar()">
+          Modificar datos
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

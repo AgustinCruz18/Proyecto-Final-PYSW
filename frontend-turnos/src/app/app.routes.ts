@@ -7,23 +7,60 @@ import { DashboardPacienteComponent } from './components/dashboard-paciente/dash
 import { RegistroComponent } from './components/registro/registro.component';
 import { PortadaComponent } from './components/portada/portada.component';
 import { DatosPersonalesComponent } from './components/datos-personales/datos-personales.component';
-import { DetallePacienteComponent } from './detalle-paciente/detalle-paciente.component';
+import { DetallePacienteComponent } from './components/detalle-paciente/detalle-paciente.component';
 import { PagoEstatusComponent } from './components/pago-estatus/pago-estatus.component';
-
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
+
     { path: '', redirectTo: 'portada', pathMatch: 'full' },
     { path: 'portada', component: PortadaComponent }, // Ruta por defecto
     { path: 'login', component: LoginComponent },
     { path: 'registro', component: RegistroComponent },
-    { path: 'admin', component: DashboardAdminComponent },
-    { path: 'secretaria', component: DashboardSecretariaComponent },
-    { path: 'paciente/:id', component: DashboardPacienteComponent },
-    { path: 'detalle-paciente/:id', component: DetallePacienteComponent },
-    { path: 'datos-personales/:id', component: DatosPersonalesComponent },
-    { path: 'secretaria', component: DashboardSecretariaComponent },
+    {
+        path: 'admin',
+        component: DashboardAdminComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['administrador'] }
+    },
+    {
+        path: 'secretaria',
+        component: DashboardSecretariaComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['secretaria'] }
+    },
+    {
+        path: 'paciente/:id',
+        component: DashboardPacienteComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['paciente'] }
+    },
+    {
+        path: 'paciente/detalle-paciente/:id',
+        component: DetallePacienteComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['paciente'] }
+    },
+    {
+        path: 'paciente/datos-personales/:id',
+        component:  DatosPersonalesComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['paciente'] }
+    },
+    {
+        path: 'secretaria',
+        component: DashboardSecretariaComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['secretaria'] }
+    },
+    {
+        path: 'pago/estatus',
+        component:  PagoEstatusComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['paciente'] }
+    },
     { path: '**', redirectTo: 'portada' },
-    { path: 'pago/estatus', component: PagoEstatusComponent },
+    
 
 ];
 

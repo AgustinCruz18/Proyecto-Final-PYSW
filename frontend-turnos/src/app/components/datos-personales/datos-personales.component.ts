@@ -167,14 +167,14 @@ export class DatosPersonalesComponent implements OnInit {
         setTimeout(() => {
           submitBtn?.focus();
           if (redirigir) {
-            this.router.navigate([`/detalle-paciente/${this.userId}`]); // 👉 Redirigir después de cerrar el modal
+            this.router.navigate([`/paciente/detalle-paciente/${this.userId}`]); // 👉 Redirigir después de cerrar el modal
           }
         }, 100);
       }, { once: true });
     } else {
       alert(this.mensajeModal);
       if (redirigir) {
-        this.router.navigate([`/detalle-paciente/${this.userId}`]);
+        this.router.navigate([`/paciente/detalle-paciente/${this.userId}`]);
       }
     }
   }
