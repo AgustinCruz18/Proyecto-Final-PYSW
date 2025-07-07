@@ -14,7 +14,7 @@ const iaRoutes = require('./routes/iaRoutes');
 const authRoutes = require('./routes/authRoutes'); // Declarar una vez
 const fichaRoutes = require('./routes/fichaPacienteRoutes'); // Declarar una vez
 const mercadoPagoRoutes = require('./routes/mercadoPagoRoutes'); // Asegúrate de tener esta ruta si la usas
-
+const reporteRoutes = require('./routes/reporteRoutes');
 // Modelos
 const User = require('./models/User');
 require('./config/passport'); // Configuración de Passport
@@ -35,7 +35,7 @@ app.use('/api/medicos', medicoRoutes);
 app.use('/api/horarios', horarioRoutes);
 app.use('/api/turnos', turnoRoutes);
 app.use('/api/mercadopago', mercadoPagoRoutes);
-
+app.use('/api/reportes', reporteRoutes);
 
 // Función para crear el administrador si no existe
 async function crearAdminSiNoExiste() {
