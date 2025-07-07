@@ -1,115 +1,315 @@
-<div class="dashboard-card">
-    <h2>Registrar Gerente</h2>
-    <form (ngSubmit)="registrarGerente()" #formGte="ngForm" class="form-section" novalidate>
-        <div class="row g-3 align-items-end">
+<div class="dashboard-admin-container card shadow-sm p-3 p-md-4">
 
-            <div class="col-md-4">
-                <label for="nombreGte" class="form-label">Nombre</label>
-                <input type="text" id="nombreGte" class="form-control" [(ngModel)]="nombre" name="nombre" required
-                    #nombreGteRef="ngModel" [class.is-invalid]="nombreGteRef.invalid && nombreGteRef.touched"
-                    [class.is-valid]="nombreGteRef.valid && nombreGteRef.touched" />
-                <div class="invalid-feedback" *ngIf="nombreGteRef.invalid && nombreGteRef.touched">
-                    El nombre es obligatorio.
-                </div>
+    <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="register-secretary-tab" data-bs-toggle="tab"
+                data-bs-target="#register-secretary-pane" type="button" role="tab"
+                aria-controls="register-secretary-pane" aria-selected="true">
+                <i class="bi bi-person-plus-fill me-2"></i>Registrar Secretaria
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="register-manager-tab" data-bs-toggle="tab"
+                data-bs-target="#register-manager-pane" type="button" role="tab" aria-controls="register-manager-pane"
+                aria-selected="false">
+                <i class="bi bi-person-fill-gear me-2"></i>Registrar Gerente
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="register-specialty-tab" data-bs-toggle="tab"
+                data-bs-target="#register-specialty-pane" type="button" role="tab"
+                aria-controls="register-specialty-pane" aria-selected="false">
+                <i class="bi bi-journal-medical me-2"></i>Gestionar Especialidades
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="adminTabContent">
+
+        <div class="tab-pane fade show active" id="register-secretary-pane" role="tabpanel"
+            aria-labelledby="register-secretary-tab">
+
+            <div *ngIf="mensajeUsuarios" class="alert alert-info alert-dismissible fade show" role="alert">
+                {{ mensajeUsuarios }}
+                <button type="button" class="btn-close" (click)="mensajeUsuarios = ''" aria-label="Close"></button>
             </div>
 
-            <div class="col-md-4">
-                <label for="emailGte" class="form-label">Email</label>
-                <input type="email" id="emailGte" class="form-control" [(ngModel)]="email" name="email" required email
-                    #emailGteRef="ngModel" [class.is-invalid]="emailGteRef.invalid && emailGteRef.touched"
-                    [class.is-valid]="emailGteRef.valid && emailGteRef.touched" />
-                <div class="invalid-feedback" *ngIf="emailGteRef.invalid && emailGteRef.touched">
-                    Debe ingresar un email válido.
+            <div class="row">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="form-section card p-3 shadow-sm">
+                        <h5 class="mb-3">Registrar Nueva Secretaria</h5>
+                        <form (ngSubmit)="registrarSecretaria(formSec)" #formSec="ngForm" novalidate>
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label for="nombreSec" class="form-label">Nombre</label>
+                                    <input type="text" id="nombreSec" class="form-control"
+                                        [(ngModel)]="secretaria.nombre" name="nombreSec" required
+                                        #nombreSecRef="ngModel"
+                                        [class.is-invalid]="nombreSecRef.invalid && nombreSecRef.touched" />
+                                    <div class="invalid-feedback" *ngIf="nombreSecRef.invalid && nombreSecRef.touched">
+                                        El nombre es obligatorio.</div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="emailSec" class="form-label">Email</label>
+                                    <input type="email" id="emailSec" class="form-control"
+                                        [(ngModel)]="secretaria.email" name="emailSec" required email
+                                        #emailSecRef="ngModel"
+                                        [class.is-invalid]="emailSecRef.invalid && emailSecRef.touched" />
+                                    <div class="invalid-feedback" *ngIf="emailSecRef.invalid && emailSecRef.touched">
+                                        Debe ingresar un email válido.</div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="passwordSec" class="form-label">Contraseña</label>
+                                    <input type="password" id="passwordSec" class="form-control"
+                                        [(ngModel)]="secretaria.password" name="passwordSec" required minlength="5"
+                                        #passSecRef="ngModel"
+                                        [class.is-invalid]="passSecRef.invalid && passSecRef.touched" />
+                                    <div class="invalid-feedback" *ngIf="passSecRef.invalid && passSecRef.touched">Debe
+                                        tener al menos 5 caracteres.</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary mt-3" type="submit" [disabled]="formSec.invalid">Registrar
+                                Secretaria</button>
+                        </form>
+                        <p *ngIf="mensajeSecretaria" class="text-success mt-2">{{ mensajeSecretaria }}</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h5 class="mb-3">Secretarias Registradas</h5>
+                    <div class="table-responsive shadow-sm rounded">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="text-center">Nombre</th>
+                                    <th class="text-center">Email</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let user of listaSecretarias">
+                                    <td data-label="Nombre" class="text-center">{{ user.nombre }}</td>
+                                    <td data-label="Email" class="text-center">{{ user.email }}</td>
+                                    <td data-label="Acciones" class="text-center">
+                                        <button class="btn btn-sm btn-outline-primary me-2"
+                                            (click)="editarUsuario(user)" title="Editar {{user.nombre}}">
+                                            <i class="bi bi-pencil-square"></i> Editar
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger"
+                                            (click)="confirmarEliminarUsuario(user._id)"
+                                            title="Eliminar {{user.nombre}}">
+                                            <i class="bi bi-trash-fill"></i> Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="listaSecretarias.length === 0">
+                                    <td colspan="3" class="text-center fst-italic py-4">No hay secretarias
+                                        registradas.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-
-            <div class="col-md-4">
-                <label for="passwordGte" class="form-label">Contraseña</label>
-                <input type="password" id="passwordGte" class="form-control" [(ngModel)]="password" name="password"
-                    required minlength="5" #passGteRef="ngModel"
-                    [class.is-invalid]="passGteRef.invalid && passGteRef.touched"
-                    [class.is-valid]="passGteRef.valid && passGteRef.touched" />
-                <div class="invalid-feedback" *ngIf="passGteRef.invalid && passGteRef.touched">
-                    Debe tener al menos 5 caracteres.
-                </div>
-            </div>
-
         </div>
 
-        <button class="btn btn-secondary mt-3" type="submit" [disabled]="formGte.invalid">Registrar</button>
-    </form>
+        <div class="tab-pane fade" id="register-manager-pane" role="tabpanel" aria-labelledby="register-manager-tab">
 
-    <p *ngIf="mensajeGerente" class="text-success">{{ mensajeGerente }}</p>
-
-    <h2>Registrar Secretaria</h2>
-    <form (ngSubmit)="registrar()" #form="ngForm" class="form-section" novalidate>
-        <div class="row g-3 align-items-end">
-
-            <div class="col-md-4">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" id="nombre" class="form-control" [(ngModel)]="nombre" name="nombre" required
-                    #nombreRef="ngModel" [class.is-invalid]="nombreRef.invalid && nombreRef.touched"
-                    [class.is-valid]="nombreRef.valid && nombreRef.touched" />
-                <div class="invalid-feedback" *ngIf="nombreRef.invalid && nombreRef.touched">
-                    El nombre es obligatorio.
+            <div class="row">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="form-section card p-3 shadow-sm">
+                        <h5 class="mb-3">Registrar Nuevo Gerente</h5>
+                        <form (ngSubmit)="registrarGerente(formGte)" #formGte="ngForm" novalidate>
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label for="nombreGte" class="form-label">Nombre</label>
+                                    <input type="text" id="nombreGte" class="form-control" [(ngModel)]="gerente.nombre"
+                                        name="nombreGte" required #nombreGteRef="ngModel"
+                                        [class.is-invalid]="nombreGteRef.invalid && nombreGteRef.touched" />
+                                    <div class="invalid-feedback" *ngIf="nombreGteRef.invalid && nombreGteRef.touched">
+                                        El nombre es obligatorio.</div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="emailGte" class="form-label">Email</label>
+                                    <input type="email" id="emailGte" class="form-control" [(ngModel)]="gerente.email"
+                                        name="emailGte" required email #emailGteRef="ngModel"
+                                        [class.is-invalid]="emailGteRef.invalid && emailGteRef.touched" />
+                                    <div class="invalid-feedback" *ngIf="emailGteRef.invalid && emailGteRef.touched">
+                                        Debe ingresar un email válido.</div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="passwordGte" class="form-label">Contraseña</label>
+                                    <input type="password" id="passwordGte" class="form-control"
+                                        [(ngModel)]="gerente.password" name="passwordGte" required minlength="5"
+                                        #passGteRef="ngModel"
+                                        [class.is-invalid]="passGteRef.invalid && passGteRef.touched" />
+                                    <div class="invalid-feedback" *ngIf="passGteRef.invalid && passGteRef.touched">Debe
+                                        tener al menos 5 caracteres.</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary mt-3" type="submit" [disabled]="formGte.invalid">Registrar
+                                Gerente</button>
+                        </form>
+                        <p *ngIf="mensajeGerente" class="text-success mt-2">{{ mensajeGerente }}</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h5 class="mb-3">Gerentes Registrados</h5>
+                    <div class="table-responsive shadow-sm rounded">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="text-center">Nombre</th>
+                                    <th class="text-center">Email</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let user of listaGerentes">
+                                    <td data-label="Nombre" class="text-center">{{ user.nombre }}</td>
+                                    <td data-label="Email" class="text-center">{{ user.email }}</td>
+                                    <td data-label="Acciones" class="text-center">
+                                        <button class="btn btn-sm btn-outline-primary me-2"
+                                            (click)="editarUsuario(user)" title="Editar {{user.nombre}}">
+                                            <i class="bi bi-pencil-square"></i> Editar
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger"
+                                            (click)="confirmarEliminarUsuario(user._id)"
+                                            title="Eliminar {{user.nombre}}">
+                                            <i class="bi bi-trash-fill"></i> Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="listaGerentes.length === 0">
+                                    <td colspan="3" class="text-center fst-italic py-4">No hay gerentes registrados.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-
-            <div class="col-md-4">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" id="email" class="form-control" [(ngModel)]="email" name="email" required email
-                    #emailRef="ngModel" [class.is-invalid]="emailRef.invalid && emailRef.touched"
-                    [class.is-valid]="emailRef.valid && emailRef.touched" />
-                <div class="invalid-feedback" *ngIf="emailRef.invalid && emailRef.touched">
-                    Debe ingresar un email válido.
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <label for="password" class="form-label">Contraseña</label>
-                <input type="password" id="password" class="form-control" [(ngModel)]="password" name="password"
-                    required minlength="5" #passRef="ngModel" [class.is-invalid]="passRef.invalid && passRef.touched"
-                    [class.is-valid]="passRef.valid && passRef.touched" />
-                <div class="invalid-feedback" *ngIf="passRef.invalid && passRef.touched">
-                    Debe tener al menos 5 caracteres.
-                </div>
-            </div>
-
         </div>
 
-        <button class="btn btn-primary mt-3" type="submit" [disabled]="form.invalid">Registrar</button>
-    </form>
+        <div class="tab-pane fade" id="register-specialty-pane" role="tabpanel"
+            aria-labelledby="register-specialty-tab">
+            <h5 class="mb-3">Gestionar Especialidades</h5>
 
-    <p *ngIf="mensaje">{{ mensaje }}</p>
+            <div *ngIf="mensajeEspecialidad" class="alert alert-info alert-dismissible fade show" role="alert">
+                {{ mensajeEspecialidad }}
+                <button type="button" class="btn-close" (click)="mensajeEspecialidad = ''" aria-label="Close"></button>
+            </div>
 
-    <hr>
-    <h4>Registrar nueva especialidad</h4>
-    <form (ngSubmit)="crearEspecialidad()" #formEsp="ngForm" class="form-section">
-        <div class="form-row">
-            <input [(ngModel)]="especialidadNombre" name="nombreEspecialidad" required
-                placeholder="Nombre de especialidad" />
-            <button type="submit" [disabled]="formEsp.invalid">Registrar especialidad</button>
+            <div class="row">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="form-section card p-3 shadow-sm">
+                        <h6 class="mb-3">Añadir Nueva Especialidad</h6>
+                        <form (ngSubmit)="crearEspecialidad(especialidadForm)" #especialidadForm="ngForm" novalidate>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Nombre de la especialidad"
+                                    [(ngModel)]="especialidadNombre" name="especialidadNombre" required
+                                    #especialidadNombreRef="ngModel"
+                                    [class.is-invalid]="especialidadNombreRef.invalid && especialidadNombreRef.touched">
+                                <button class="btn btn-primary" type="submit"
+                                    [disabled]="especialidadForm.invalid">Añadir</button>
+                                <div class="invalid-feedback"
+                                    *ngIf="especialidadNombreRef.invalid && especialidadNombreRef.touched">
+                                    El nombre de la especialidad es obligatorio.
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="table-responsive shadow-sm rounded">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="text-center">Nombre</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let especialidad of especialidades">
+                                    <td class="text-center">{{ especialidad.nombre }}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-outline-danger"
+                                            (click)="confirmarEliminarEspecialidad(especialidad._id)">
+                                            <i class="bi bi-trash-fill"></i> Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="especialidades.length === 0">
+                                    <td colspan="2" class="text-center fst-italic py-4">No hay especialidades
+                                        registradas.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-        <p class="text-success mt-2" *ngIf="mensajeEspecialidad">{{ mensajeEspecialidad }}</p>
-    </form>
+    </div>
+</div>
 
-    <div class="table-responsive">
-        <h5>Especialidades registradas</h5>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let esp of especialidades">
-                    <td>{{ esp.nombre }}</td>
-                    <td>
-                        <button class="btn-eliminar" (click)="eliminarEspecialidad(esp._id)">Eliminar</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+<div class="modal fade" id="editarUsuarioModal" tabindex="-1" aria-labelledby="editarUsuarioModalLabel"
+    aria-hidden="true" [ngClass]="{'show d-block': usuarioEditando}"
+    [style.background-color]="usuarioEditando ? 'rgba(0,0,0,0.5)' : 'transparent'">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" *ngIf="usuarioEditando">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarUsuarioModalLabel">Editar Usuario: <span class="text-capitalize">{{
+                        usuarioEditando.rol }}</span></h5>
+                <button type="button" class="btn-close" (click)="cancelarEdicion()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form #editForm="ngForm" (ngSubmit)="guardarCambiosUsuario()">
+                    <div class="mb-3">
+                        <label for="editNombre" class="form-label">Nombre</label>
+                        <input type="text" id="editNombre" class="form-control" name="nombre"
+                            [(ngModel)]="usuarioEditando.nombre" required #editNombreRef="ngModel"
+                            [class.is-invalid]="editNombreRef.invalid && editNombreRef.touched">
+                        <div class="invalid-feedback" *ngIf="editNombreRef.invalid && editNombreRef.touched">El nombre
+                            es obligatorio.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editEmail" class="form-label">Email</label>
+                        <input type="email" id="editEmail" class="form-control" name="email"
+                            [(ngModel)]="usuarioEditando.email" required email #editEmailRef="ngModel"
+                            [class.is-invalid]="editEmailRef.invalid && editEmailRef.touched">
+                        <div class="invalid-feedback" *ngIf="editEmailRef.invalid && editEmailRef.touched">El email no
+                            es válido.</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+                <button type="button" class="btn btn-primary" (click)="guardarCambiosUsuario()"
+                    [disabled]="editForm.invalid">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-labelledby="confirmarEliminarModalLabel"
+    aria-hidden="true" [ngClass]="{'show d-block': idUsuarioAEliminar || idEspecialidadAEliminar}"
+    [style.background-color]="(idUsuarioAEliminar || idEspecialidadAEliminar) ? 'rgba(0,0,0,0.5)' : 'transparent'">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmarEliminarModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" (click)="cancelarEliminacionConfirmada()"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas eliminar este elemento? Esta acción no se puede deshacer.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                    (click)="cancelarEliminacionConfirmada()">Cancelar</button>
+                <button type="button" class="btn btn-danger" (click)="ejecutarEliminacion()">Eliminar</button>
+            </div>
+        </div>
     </div>
 </div>

@@ -239,21 +239,19 @@ export class DashboardPacienteComponent implements OnInit {
     if (!this.pregunta.trim()) return;
 
     const mensajeUsuario = this.pregunta;
-    this.mensajes.push({ origen: 'paciente', texto: mensajeUsuario }); // Agrega el mensaje del usuario
-    this.pregunta = ''; // Limpia el input
+    this.mensajes.push({ origen: 'paciente', texto: mensajeUsuario });
+    this.pregunta = '';
 
-    this.http.post<any>('https://backend-turnos-1.onrender.com/api/ia', { pregunta: mensajeUsuario }).subscribe({
+    this.http.post<any>('http://localhost:5000/api/ia', { pregunta: mensajeUsuario }).subscribe({
       next: res => {
-        this.mensajes.push({ origen: 'ia', texto: res.respuesta }); // Agrega la respuesta de la IA
+        this.mensajes.push({ origen: 'ia', texto: res.respuesta });
       },
       error: () => {
         this.mensajes.push({ origen: 'ia', texto: ' Error al conectar con el asistente.' });
       }
     });
   }
-
-  /**
-   * Cancela el proceso de reserva y oculta el formulario.
+  /* Cancela el proceso de reserva y oculta el formulario.
    */
   cancelarReserva() {
     this.turnoAReservarId = '';

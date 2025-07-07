@@ -7,7 +7,8 @@
 }
 
 /* Títulos */
-h1, h2 {
+h1,
+h2 {
   color: var(--color-principal);
   font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
   font-weight: 800;
@@ -21,7 +22,9 @@ h2 {
 }
 
 /* Formularios */
-input[type="text"], input[type="email"], input[type="password"] {
+input[type="text"],
+input[type="email"],
+input[type="password"] {
   border: 1.5px solid var(--color-borde);
   border-radius: 8px;
   padding: 0.7em 1em;
@@ -34,12 +37,14 @@ input[type="text"], input[type="email"], input[type="password"] {
   width: 100%;
   max-width: 320px;
 }
+
 input:focus {
   border-color: var(--color-principal);
   outline: none;
 }
 
-button, .btn {
+button,
+.btn {
   background: var(--color-principal);
   color: #fff;
   border: none;
@@ -53,12 +58,16 @@ button, .btn {
   outline: none;
   margin-bottom: 0.5rem;
 }
-button:disabled, .btn:disabled {
+
+button:disabled,
+.btn:disabled {
   background: var(--color-borde);
   color: #aaa;
   cursor: not-allowed;
 }
-button:hover:not(:disabled), .btn:hover:not(:disabled) {
+
+button:hover:not(:disabled),
+.btn:hover:not(:disabled) {
   background: var(--color-secundario);
   color: #fff;
 }
@@ -92,7 +101,8 @@ table {
   overflow: hidden;
 }
 
-th, td {
+th,
+td {
   padding: 1.1rem 1.3rem;
   text-align: left;
 }
@@ -128,7 +138,8 @@ tr:last-child td {
 }
 
 /* Botón eliminar */
-.btn-eliminar, .btn-danger {
+.btn-eliminar,
+.btn-danger {
   background: var(--color-alerta);
   color: #fff;
   border: none;
@@ -139,7 +150,9 @@ tr:last-child td {
   margin: 0.2rem 0;
   transition: background 0.2s, color 0.2s;
 }
-.btn-eliminar:hover, .btn-danger:hover {
+
+.btn-eliminar:hover,
+.btn-danger:hover {
   background: #c0392b;
   color: #fff;
 }
@@ -148,13 +161,27 @@ tr:last-child td {
 .dashboard-card {
   background: var(--color-fondo-sec);
   border-radius: 22px;
-  box-shadow: 0 4px 32px rgba(0,102,166,0.08);
+  box-shadow: 0 4px 32px rgba(0, 102, 166, 0.08);
   padding: 2.5rem 2.5rem 2rem 2.5rem;
   margin: 2rem auto;
   max-width: 900px;
   min-width: 320px;
   width: 95%;
   box-sizing: border-box;
+}
+
+.form-section.card {
+  max-width: 500px;
+  /* Establece un ancho máximo para la tarjeta del formulario */
+  margin-left: auto;
+  /* Centra la tarjeta horizontalmente */
+  margin-right: auto;
+  /* Centra la tarjeta horizontalmente */
+}
+
+.form-section.card form button {
+  width: 100%;
+  /* Hace que el botón ocupe todo el ancho disponible del formulario */
 }
 
 /* Formularios y tablas dentro del contenedor */
@@ -170,6 +197,7 @@ tr:last-child td {
 
 /* Responsive: menos padding en mobile */
 @media (max-width: 600px) {
+
   .dashboard-card,
   .form-section,
   .table-responsive {
@@ -179,17 +207,24 @@ tr:last-child td {
 }
 
 @media (max-width: 900px) {
-  .form-section, table {
+
+  .form-section,
+  table {
     padding: 1rem 0.5rem;
     font-size: 0.97rem;
   }
-  th, td {
+
+  th,
+  td {
     padding: 0.7rem 0.5rem;
   }
+
   h2 {
     font-size: 1.2rem;
   }
-  button, .btn {
+
+  button,
+  .btn {
     padding: 0.5rem 1.1rem;
     font-size: 0.97rem;
   }

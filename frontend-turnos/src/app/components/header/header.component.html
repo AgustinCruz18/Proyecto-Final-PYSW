@@ -15,7 +15,10 @@
                     <span class="dropdown-item-text ms-3">{{ user()?.email }}</span>
                     <hr class="dropdown-divider w-100 my-1" />
                     <button class="dropdown-menu-button ms-3" (click)="irAPortada()">Menú</button>
-                    <a class="nav-link ms-3" (click)="irADatosPersonales()">Datos personales</a>
+
+                    <a class="nav-link ms-3" (click)="irADatosPersonales()" *ngIf="user()?.rol === 'paciente'">Datos
+                        personales</a>
+
                     <a class="nav-link text-danger ms-3" (click)="logout()">Cerrar sesión</a>
                 </li>
 
@@ -33,17 +36,18 @@
                             <i class="bi bi-house-door-fill me-2 text-primary"></i>
                             <button class="dropdown-menu-button w-100" (click)="irAPortada()">Menu</button>
                         </li>
-
                         <li class="d-flex align-items-center mb-2 px-2" *ngIf="user()?.rol === 'secretaria'">
                             <i class="bi bi-person-badge me-2 text-primary"></i>
                             <a class="dropdown-item" routerLink="/secretaria">Dashboard Secretaria</a>
                         </li>
-
                         <li class="d-flex align-items-center mb-2 px-2" *ngIf="user()?.rol === 'administrador'">
                             <i class="bi bi-shield-lock-fill me-2 text-primary"></i>
                             <a class="dropdown-item" routerLink="/admin">Dashboard Admin</a>
                         </li>
-                        <li><a class="dropdown-item" (click)="irADatosPersonales()">Datos personales</a></li>
+
+                        <li *ngIf="user()?.rol === 'paciente'"><a class="dropdown-item"
+                                (click)="irADatosPersonales()">Datos personales</a></li>
+
                         <li><a class="dropdown-item text-danger" (click)="logout()">Cerrar sesión</a></li>
                     </ul>
                 </li>
