@@ -11,29 +11,27 @@ router.get('/estadisticas', verificarRol(['gerente']), async (req, res) => {
     try {
         const totalPacientes = await User.countDocuments({ rol: 'paciente' });
         const totalSecretarias = await User.countDocuments({ rol: 'secretaria' });
-        const totalTurnos = await Turno.countDocuments();
         const totalMedicos = await Medico.countDocuments();
         const especialidades = await Especialidad.find();
 
         // Contar cuántos turnos hay por especialidad
         const turnosPorEspecialidad = await Turno.aggregate([
+            { $match: { estado: 'ocupado' } }, // 👈 Filtrar por estado ocupado
             {
                 $group: {
-                    _id: '$especialidad', // asumimos que 'Turno' tiene un campo 'especialidad'
+                    _id: '$especialidad',
                     cantidad: { $sum: 1 }
                 }
             },
             {
                 $lookup: {
-                    from: 'especialidads', // nombre de la colección (ojo: pluralización de Mongoose)
+                    from: 'especialidads',
                     localField: '_id',
                     foreignField: '_id',
                     as: 'especialidad'
                 }
             },
-            {
-                $unwind: '$especialidad'
-            },
+            { $unwind: '$especialidad' },
             {
                 $project: {
                     nombre: '$especialidad.nombre',
@@ -41,6 +39,10 @@ router.get('/estadisticas', verificarRol(['gerente']), async (req, res) => {
                 }
             }
         ]);
+
+        // También contar solo los turnos ocupados
+        const totalTurnos = await Turno.countDocuments({ estado: 'ocupado' });
+
 
         res.json({
             pacientes: totalPacientes,
@@ -60,6 +62,7 @@ router.get('/estadisticas', verificarRol(['gerente']), async (req, res) => {
 router.get('/turnos-por-medico', verificarRol(['gerente']), async (req, res) => {
     try {
         const resultado = await Turno.aggregate([
+            { $match: { estado: 'ocupado' } }, // 👈 Filtrar por estado ocupado
             {
                 $group: {
                     _id: '$medico',
@@ -77,7 +80,7 @@ router.get('/turnos-por-medico', verificarRol(['gerente']), async (req, res) => 
             { $unwind: '$medico' },
             {
                 $lookup: {
-                    from: 'especialidads', // ⚠️ Nombre correcto de la colección
+                    from: 'especialidads',
                     localField: 'medico.especialidad',
                     foreignField: '_id',
                     as: 'especialidad'

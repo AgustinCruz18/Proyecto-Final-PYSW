@@ -42,6 +42,7 @@ export class DashboardSecretariaComponent implements OnInit {
   estadoFiltro: string = 'todos';
 
   @ViewChild('formHorario') formHorarioRef!: NgForm;
+  @ViewChild('formMedico') formMedicoRef!: NgForm;
 
   constructor(
     private http: HttpClient,
@@ -103,6 +104,8 @@ export class DashboardSecretariaComponent implements OnInit {
       next: () => {
         this.mensajeMedico = 'Médico registrado correctamente.';
         this.medico = { nombre: '', apellido: '', especialidad: '' };
+        this.formMedicoRef.resetForm();
+        setTimeout(() => this.mensajeMedico = '', 2000);
         this.cargarMedicos();
       },
       error: () => {
@@ -152,7 +155,7 @@ export class DashboardSecretariaComponent implements OnInit {
         }
         this.formHorarioRef.resetForm(); // primero limpiás el form
         this.mensajeHorario = 'Horario creado correctamente.';
-        setTimeout(() => this.mensajeHorario = '', 3000);
+        setTimeout(() => this.mensajeHorario = '', 2000);
 
       },
       error: () => {
