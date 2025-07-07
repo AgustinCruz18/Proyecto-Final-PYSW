@@ -2,4 +2,10 @@
 <app-header *ngIf="showHeader()"></app-header>
 
 <!-- Carga las rutas -->
-<router-outlet></router-outlet>
+<main>
+    <router-outlet></router-outlet>
+</main>
+
+
+<!-- Solo muestra el footer si la función retorna true -->
+<app-footer *ngIf="showFooter()"></app-footer>

@@ -3,11 +3,12 @@ import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { HeaderComponent } from './components/header/header.component';
 import { CommonModule } from '@angular/common';
+import { FooterComponent } from './components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, HeaderComponent],
+  imports: [RouterOutlet, CommonModule, HeaderComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -54,5 +55,10 @@ export class AppComponent implements OnInit {
 
     // Detecta bien si alguna de las rutas coincide, incluso si hay parámetros
     return !sinHeader.some(ruta => this.currentUrl.startsWith(ruta)) && !!this.auth.getToken();
+  }
+
+  showFooter(): boolean {
+    const sinFooter = ['/login', '/registro', '/portada'];
+    return !sinFooter.some(ruta => this.currentUrl.startsWith(ruta)) && !!this.auth.getToken();
   }
 }

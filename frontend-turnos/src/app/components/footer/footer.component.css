@@ -1,0 +1,27 @@
+.portada-footer {
+  background-color: #ffffff;
+  padding: 1rem 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+  border-top: 1px solid #ddd;
+  width: 100%;
+} 
+
+.footer-content {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-links a {
+  color: #007bff;
+  text-decoration: none;
+  margin: 0 0.3rem;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
