@@ -5,6 +5,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TurnoService } from '../../services/turno.service';
 import { FormsModule } from '@angular/forms';
 import { SafeHtmlPipe } from '../../safe-html.pipe';
+import { environment } from '../../../environments/environment'; // o ajustá el path
+
 
 @Component({
   selector: 'app-dashboard-paciente',
@@ -40,6 +42,7 @@ export class DashboardPacienteComponent implements OnInit {
   precioBase: number = 5000;
   precioConDescuento: number = 5000;
   turnoParaPagar: any = null; // Para almacenar el objeto turno seleccionado para la confirmación
+  enlaceGoogleCalendar: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -157,7 +160,6 @@ export class DashboardPacienteComponent implements OnInit {
   confirmarReserva() {
     const obraSocialNombre = this.obraSocialSeleccionada?.nombre;
 
-    // Validaciones
     if (!obraSocialNombre) {
       this.mensaje = 'Debe seleccionar una obra social válida.';
       return;
@@ -173,39 +175,32 @@ export class DashboardPacienteComponent implements OnInit {
       return;
     }
 
-    // Datos para el backend de Mercado Pago
     const idTurno = this.turnoParaPagar._id;
     const idMedico = this.medicoSeleccionado;
     const idEspecialidad = this.especialidadSeleccionada;
-    const obraSocial = obraSocialNombre || 'Particular'; // Asegura un valor por defecto
-    //const email = this.ficha?.email || 'test@email.com'; // Email del pagador, con fallback
-    const email = this.ficha?.email || 'paciente@email.com';
-    // ✅ Email del usuario comprador de prueba
+    const obraSocial = obraSocialNombre || 'Particular';
 
-    console.log("Enviando al backend:", {
-      idTurno, idMedico, idEspecialidad, obra_social: obraSocial, payer_email: email, precio: this.precioConDescuento
-    });
+    // ✅ Email del comprador de prueba de Mercado Pago
+    const email = 'TESTUSER704263090@testuser.com';
 
     if (!idTurno || !idMedico || !idEspecialidad || !obraSocial || !email) {
       this.mensaje = 'Faltan datos para generar el pago.';
       return;
     }
 
-    // Llamada al backend para generar el link de pago de Mercado Pago
-    this.http.post<any>('http://localhost:5000/api/mercadopago/pago', {
+    this.http.post<any>(`${environment.apiUrl}/mercadopago/pago`, {
       idTurno,
       idMedico,
       idEspecialidad,
       obra_social: obraSocial,
       payer_email: email,
-      precio: this.precioConDescuento // Pasa el precio calculado al backend
+      precio: this.precioConDescuento
     }).subscribe({
       next: (res) => {
         if (res.init_point) {
           localStorage.setItem('turnoAPagar', JSON.stringify(this.turnoParaPagar));
           window.location.href = res.init_point;
         } else {
-          // Si no hay link de pago porque es 100% cubierto
           this.reservarTurnoDirecto();
         }
       },
@@ -215,22 +210,26 @@ export class DashboardPacienteComponent implements OnInit {
       }
     });
   }
+
   reservarTurnoDirecto() {
-    this.http.post('http://localhost:5000/api/turnos/reservar', {
+    this.http.post<any>('http://localhost:5000/api/turnos/reservar', {
       turnoId: this.turnoParaPagar._id,
-      pacienteId: this.ficha.userId, // <- usa userId aquí si es necesario
+      pacienteId: this.ficha.userId,
       obraSocial: this.obraSocialSeleccionada
     }).subscribe({
-      next: () => {
-        this.mensaje = 'Turno reservado automáticamente (sin pago).';
-        localStorage.removeItem('turnoAPagar');
+      next: (res) => {
+        this.mensaje = res.msg || 'Turno reservado automáticamente (sin pago).';
+        this.enlaceGoogleCalendar = res.enlaceGoogleCalendar ?? null;
         this.mostrarFormularioReserva = false;
+        localStorage.removeItem('turnoAPagar');
       },
       error: () => {
         this.mensaje = 'Error al reservar turno automáticamente.';
+        this.enlaceGoogleCalendar = null;
       }
     });
   }
+
 
 
   /**

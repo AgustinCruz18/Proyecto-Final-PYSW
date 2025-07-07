@@ -114,35 +114,71 @@ exports.reservar = async (req, res) => {
 
         await turno.save();
 
-        res.json({ message: 'Turno reservado con éxito', turno });
+        // 🔥 AÑADIR EL ENLACE DE GOOGLE CALENDAR
+        res.json({
+            message: 'Turno reservado con éxito',
+            turno,
+            enlaceGoogleCalendar: evento.htmlLink
+        });
     } catch (err) {
         console.error('❌ Error al reservar turno:', err);
         res.status(500).json({ message: 'Error del servidor' });
     }
 };
 
+
 exports.reservarTurnoDirecto = async (req, res) => {
     const { turnoId, pacienteId, obraSocial } = req.body;
 
     try {
-        const turno = await Turno.findById(turnoId);
+        const turno = await Turno.findById(turnoId).populate('medico').populate('especialidad');
         if (!turno) return res.status(404).json({ msg: 'Turno no encontrado' });
 
         if (turno.estado !== 'disponible') {
             return res.status(400).json({ msg: 'El turno ya está ocupado' });
         }
 
+        const paciente = await User.findById(pacienteId);
+        if (!paciente) return res.status(404).json({ msg: 'Paciente no encontrado' });
+
+        // Crear evento Google Calendar
+        const fechaTurno = new Date(turno.fecha);
+        const [hours, minutes] = turno.hora.split(':').map(Number);
+        fechaTurno.setHours(hours, minutes, 0, 0);
+
+        const startDateTime = new Date(fechaTurno);
+        const endDateTime = new Date(startDateTime.getTime() + 30 * 60000);
+
+        const evento = await crearEventoCalendar({
+            summary: `Turno: ${turno.especialidad.nombre} con Dr. ${turno.medico.nombre} ${turno.medico.apellido}`,
+            description: `Paciente: ${paciente.nombre}\nEmail: ${paciente.email}\nObra Social: ${obraSocial.nombre}`,
+            startDateTime: startDateTime.toISOString(),
+            endDateTime: endDateTime.toISOString(),
+            attendees: [{ email: paciente.email }]
+        });
+
+        // Actualizar turno
         turno.estado = 'ocupado';
         turno.paciente = pacienteId;
-        turno.obraSocialUsada = obraSocial;
+        turno.obraSocial = {
+            nombre: obraSocial.nombre,
+            numeroSocio: obraSocial.numeroSocio || 'N/A'
+        };
+        turno.eventoGoogleId = evento.id;
+        turno.precioPagado = 0;
         await turno.save();
 
-        res.status(200).json({ msg: 'Turno reservado con éxito' });
+        res.status(200).json({
+            msg: 'Turno reservado correctamente (sin pago)',
+            turno,
+            enlaceGoogleCalendar: evento.htmlLink
+        });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Error al reservar turno' });
+        console.error('❌ Error en reserva directa:', err);
+        res.status(500).json({ msg: 'Error del servidor al reservar turno directo' });
     }
 };
+
 exports.eliminar = async (req, res) => {
     try {
         const turno = await Turno.findByIdAndDelete(req.params.id);

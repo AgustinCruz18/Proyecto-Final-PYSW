@@ -76,6 +76,13 @@
         }">
         {{ mensaje }}
       </div>
+
+      <div *ngIf="enlaceGoogleCalendar" class="mt-2 text-center">
+        <a [href]="enlaceGoogleCalendar" target="_blank" class="btn btn-outline-info btn-sm">
+          Ver en Google Calendar
+        </a>
+      </div>
+
     </div>
   </div>
 

@@ -16,14 +16,23 @@ export class TurnoService {
     return this.http.get<any[]>('http://localhost:5000/api/turnos');
   }
 
-  reservarTurno(turnoId: string, pacienteId: string, obraSocial: any) {
+  reservarTurno(turnoId: string, pacienteId: string, obraSocial: any): Observable<{
+    message: string,
+    turno: any,
+    enlaceGoogleCalendar?: string
+  }> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.put(`${this.apiUrl}/reservar/${turnoId}`, {
+    return this.http.put<{
+      message: string,
+      turno: any,
+      enlaceGoogleCalendar?: string
+    }>(`${this.apiUrl}/reservar/${turnoId}`, {
       pacienteId,
       obraSocialElegida: obraSocial
     }, { headers });
   }
+
 
   eliminarTurno(id: string) {
     const token = localStorage.getItem('token');

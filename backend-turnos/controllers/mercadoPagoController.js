@@ -9,6 +9,9 @@ mercadoPagoCtrl.generarPago = async (req, res) => {
   try {
     const { idTurno, obra_social, payer_email } = req.body;
 
+    // Determina si la aplicación está en producción o desarrollo para configurar las URLs de retorno
+    const frontendBaseUrl = 'http://localhost:4200';
+
     const descuentosObraSocial = {
       "OSDE": 1,
       "Swiss Medical": 0.998,
@@ -30,10 +33,6 @@ mercadoPagoCtrl.generarPago = async (req, res) => {
     if (precioFinal === 0) {
       return res.status(200).json({ init_point: null, msg: 'Turno con cobertura total, no se requiere pago' });
     }
-    if (precioFinal === 0) {
-      // 👉 No generamos preferencia para precio 0
-      return res.status(200).json({ init_point: null });
-    }
 
     const body = {
       payer_email,
@@ -46,10 +45,11 @@ mercadoPagoCtrl.generarPago = async (req, res) => {
       metadata: {
         idTurno: idTurno
       },
+      // Se usan las URLs base dinámicas para los retornos de Mercado Pago
       back_urls: {
-        success: "http://localhost:4200/pago-estatus?status=approved",
-        failure: "http://localhost:4200/pago-estatus?status=rejected",
-        pending: "http://localhost:4200/pago-estatus?status=pending"
+        success: "http://localhost:4200/pago/estatus?status=approved",
+        failure: "http://localhost:4200/pago/estatus?status=rejected",
+        pending: "http://localhost:4200/pago/estatus?status=pending"
       },
       auto_return: "approved"
     };
@@ -60,6 +60,7 @@ mercadoPagoCtrl.generarPago = async (req, res) => {
         'Content-Type': 'application/json'
       }
     });
+    console.log('🔑 Token de MP:', process.env.MERCADO_PAGO_ACCESS_TOKEN);
 
     res.status(200).json({ init_point: response.data.init_point });
   } catch (error) {

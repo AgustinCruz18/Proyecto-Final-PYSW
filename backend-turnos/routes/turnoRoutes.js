@@ -13,4 +13,6 @@ router.put('/:id', verificarRol(['secretaria']), controller.actualizar);
 router.delete('/:id', verificarRol(['secretaria']), controller.eliminar);
 router.post('/reservar', controller.reservarTurnoDirecto);
 router.get('/paciente/:idPaciente', controller.obtenerPorPaciente);
+router.post('/reservar-directo', verificarRol(['paciente']), controller.reservarTurnoDirecto);
+
 module.exports = router;

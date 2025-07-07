@@ -19,25 +19,30 @@ export class PagoEstatusComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       const status = params['collection_status'] || params['status'];
 
+      const turnoStr = localStorage.getItem('turnoAPagar');
+      if (!turnoStr) {
+        this.mensaje = 'No se encontró información del turno.';
+        return;
+      }
+
+      const turno = JSON.parse(turnoStr);
+
       if (status === 'approved') {
         this.estado = 'exitoso';
         this.mensaje = '¡Pago aprobado! Reservando turno...';
 
-        const turnoStr = localStorage.getItem('turnoAPagar');
-        if (!turnoStr) {
-          this.mensaje = 'No se encontró información del turno.';
-          return;
-        }
-
-        const turno = JSON.parse(turnoStr);
-        this.http.post('http://localhost:5000/api/turnos/reservar', {
-          turnoId: turno._id,
-          pacienteId: turno.paciente?._id,
-          obraSocial: turno.paciente?.obraSocial
+        this.http.put('http://localhost:5000/api/turnos/reservar/' + turno._id, {
+          pacienteId: turno.paciente._id,
+          obraSocialElegida: turno.obraSocial
         }).subscribe({
           next: () => {
             this.mensaje = '¡Pago aprobado y turno reservado con éxito!';
             localStorage.removeItem('turnoAPagar');
+
+            // Redirige al dashboard del paciente
+            setTimeout(() => {
+              window.location.href = `/paciente/${turno.paciente._id}`;
+            }, 2000);
           },
           error: () => {
             this.mensaje = 'Pago aprobado, pero hubo un error al reservar el turno.';
@@ -54,4 +59,5 @@ export class PagoEstatusComponent implements OnInit {
       }
     });
   }
+
 }
